@@ -77,7 +77,7 @@ class ApiServiceExtension extends Extension
                 ->addArgument(new Reference($schemaFactoryId))
                 ->addArgument($arguments['schema'])
                 ->addArgument($arguments['config'])
-                ->addTag('symfony-labs.api.service')
+                ->addTag('twentytwo-labs.api.service')
             ;
             if (method_exists($container, 'registerAliasForArgument')) {
                 $container->registerAliasForArgument('api_service.api.'.$name, ApiService::class, $name);
