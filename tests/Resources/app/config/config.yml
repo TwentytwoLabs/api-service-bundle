@@ -1,0 +1,37 @@
+framework:
+  secret: php-http
+  test: ~
+  # Enable framework serializer
+  serializer:
+    enabled: true
+
+# PSR-6 cache provider for Symfony versions prior to 3.1
+cache_adapter:
+  providers:
+    default:
+      factory: 'cache.factory.void'
+
+# HttpCLient provided by httplug
+httplug:
+  clients:
+    foo:
+      factory: 'httplug.factory.guzzle6'
+
+api_service:
+  cache:
+    service: 'cache'
+  pagination:
+    header: ~
+  apis:
+    foo:
+      schema: 'file://%kernel.root_dir%/config/schema/foo.yml'
+    bar:
+      schema: 'file://%kernel.root_dir%/config/schema/foo.yml'
+      client: httplug.client.foo
+      config:
+        baseUri: https://bar.com
+        validateRequest: false
+        validateResponse: true
+        returnResponse: true
+
+
