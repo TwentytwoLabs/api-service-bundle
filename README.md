@@ -9,7 +9,7 @@ Open a command console, enter your project directory and execute the following
 command to download the latest stable version of this bundle:
 
 ```bash
-composer require symfony-labs/api-service-bundle
+composer require twentytwo-labs/api-service-bundle
 ```
 
 Then, enable the bundle by adding the following line in the app/AppKernel.php 

@@ -1,5 +1,5 @@
 {
-  "name": "symfony-labs/api-service-bundle",
+  "name": "twentytwo-labs/api-service-bundle",
   "description": "Integrate API Service into Symfony",
   "type": "symfony-bundle",
   "license": "MIT",
