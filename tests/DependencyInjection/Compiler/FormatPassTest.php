@@ -35,7 +35,7 @@ class FormatPassTest extends TestCase
             ->with('api_service.decoder.symfony')
             ->willReturn($this->definition)
         ;
-        $this->definition->expects($this->once())->method('setArgument')->with(0, []);
+        $this->definition->expects($this->once())->method('setArgument')->with(0, [])->willReturnSelf();
 
         $compiler = new FormatPass();
         $compiler->process($this->containerBuilder);
@@ -63,6 +63,8 @@ class FormatPassTest extends TestCase
             $this->assertTrue(\is_array($argument));
             $this->assertCount(1, $argument);
             $this->assertInstanceOf(Definition::class, $argument[0]);
+
+            return $this->definition;
         });
 
         $compiler = new FormatPass();

@@ -112,12 +112,16 @@ class PaginatorCompilerPassTest extends TestCase
                         $this->assertSame(0, $key);
                         $this->assertIsArray($argument);
                         $this->assertNotEmpty($argument);
+
+                        return $this->pagination;
                     });
                 } elseif ('foo' === $id) {
                     $this->pagination->expects($this->exactly(2))->method('replaceArgument')->willReturnCallback(function ($key, $argument) {
                         $this->assertSame(0, $key);
                         $this->assertIsArray($argument);
                         $this->assertNotEmpty($argument);
+
+                        return $this->pagination;
                     });
                 }
 
