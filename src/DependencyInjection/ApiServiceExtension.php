@@ -30,7 +30,7 @@ class ApiServiceExtension extends Extension
         }
 
         $this->configureSerializer($container, $config['pagination']);
-        $this->configureApiServices($container, $config['apis'], $config['cache']);
+        $this->configureApiServices($container, $config['apis'], $config['cache'], $config['version']);
     }
 
     private function configureSerializer(ContainerBuilder $container, array $paginationProviders)
@@ -43,7 +43,7 @@ class ApiServiceExtension extends Extension
         }
     }
 
-    private function configureApiServices(ContainerBuilder $container, array $apiServices, array $cache)
+    private function configureApiServices(ContainerBuilder $container, array $apiServices, array $cache, int $version)
     {
         $serviceFactoryRef = new Reference('api_service.factory');
 
@@ -59,6 +59,10 @@ class ApiServiceExtension extends Extension
 
         // Configure schema factory
         $schemaFactoryId = 'api_service.schema_factory.swagger';
+        if (3 === $version) {
+            $schemaFactoryId = 'api_service.schema_factory.open-api';
+        }
+
         if ($cache['enabled']) {
             $schemaFactory = $container->getDefinition('api_service.schema_factory.cached_factory');
             $schemaFactory->replaceArgument(0, new Reference($cache['service']));
@@ -76,6 +80,7 @@ class ApiServiceExtension extends Extension
                 ->addArgument(new Reference($arguments['client']))
                 ->addArgument(new Reference($schemaFactoryId))
                 ->addArgument($arguments['schema'])
+                ->addArgument(new Reference($arguments['logger']))
                 ->addArgument($arguments['config'])
                 ->addTag('twentytwo-labs.api.service')
             ;

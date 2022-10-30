@@ -19,6 +19,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->scalarNode('version')->defaultValue(3)->end()
                 ->arrayNode('default_services')
                     ->addDefaultsIfNotSet()
                     ->info('Configure which services to use when generating API service classes')
@@ -54,6 +55,7 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('schema')->info('Absolute path to the OpenAPI/Swagger2.0 schema')->isRequired()->end()
                         ->scalarNode('client')->info('Use a specific HTTP client for an API Service')->defaultValue('api_service.client')->end()
+                        ->scalarNode('logger')->info('Use a specific Logger for an API Service')->defaultValue('logger')->end()
                         ->arrayNode('config')
                             ->addDefaultsIfNotSet()
                             ->children()

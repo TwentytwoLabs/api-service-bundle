@@ -21,6 +21,7 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
             ],
             'pagination' => [],
             'apis' => [],
+            'version' => 3,
         ];
 
         $fixturesPath = __DIR__.'/../Resources/Fixtures';
@@ -61,6 +62,7 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
                         'validateResponse' => false,
                         'returnResponse' => false,
                     ],
+                    'logger' => 'logger',
                 ],
                 'bar' => [
                     'schema' => '/path/to/bar.json',
@@ -71,8 +73,10 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
                         'validateResponse' => true,
                         'returnResponse' => true,
                     ],
+                    'logger' => 'logger',
                 ],
             ],
+            'version' => 3,
         ];
 
         $fixturesPath = __DIR__.'/../Resources/Fixtures';

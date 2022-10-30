@@ -45,6 +45,7 @@
         <!-- Schema Factories -->
 
         <service id="api_service.schema_factory.swagger" class="TwentytwoLabs\Api\Factory\SwaggerSchemaFactory" public="false" />
+        <service id="api_service.schema_factory.open-api" class="TwentytwoLabs\Api\Factory\OpenApiSchemaFactory" public="false" />
         <service id="api_service.schema_factory.cached_factory" class="TwentytwoLabs\Api\Factory\CachedSchemaFactoryDecorator" public="false">
             <argument />
             <argument />

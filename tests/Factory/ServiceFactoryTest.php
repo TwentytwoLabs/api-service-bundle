@@ -44,6 +44,9 @@ class ServiceFactoryTest extends TestCase
         $schemaFactory = $this->createMock(SchemaFactoryInterface::class);
         $schemaFactory->expects($this->once())->method('createSchema')->with($aSchemaFile)->willReturn($schema);
 
-        $this->assertInstanceOf(ApiService::class, $factory->getService($httpClient, $schemaFactory, $aSchemaFile, []));
+        $this->assertInstanceOf(
+            ApiService::class,
+            $factory->getService($httpClient, $schemaFactory, $aSchemaFile, null, [])
+        );
     }
 }

@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace TwentytwoLabs\ApiServiceBundle\Factory;
 
-use Http\Client\HttpClient;
 use Http\Message\MessageFactory;
 use Http\Message\UriFactory;
 use JsonSchema\Validator;
+use Psr\Http\Client\ClientInterface;
+use Psr\Log\LoggerInterface;
 use Rize\UriTemplate;
 use Symfony\Component\Serializer\SerializerInterface;
 use TwentytwoLabs\Api\Decoder\DecoderInterface;
@@ -15,9 +16,6 @@ use TwentytwoLabs\Api\Factory\SchemaFactoryInterface;
 use TwentytwoLabs\Api\Service\ApiService;
 use TwentytwoLabs\Api\Validator\MessageValidator;
 
-/**
- * Create an API Service.
- */
 class ServiceFactory
 {
     private UriFactory $uriFactory;
@@ -43,8 +41,13 @@ class ServiceFactory
         $this->decoder = $decoder;
     }
 
-    public function getService(HttpClient $httpClient, SchemaFactoryInterface $schemaFactory, string $schemaFile, array $config = []): ApiService
-    {
+    public function getService(
+        ClientInterface $httpClient,
+        SchemaFactoryInterface $schemaFactory,
+        string $schemaFile,
+        ?LoggerInterface $logger = null,
+        array $config = []
+    ): ApiService {
         $schema = $schemaFactory->createSchema($schemaFile);
 
         return new ApiService(
@@ -55,6 +58,7 @@ class ServiceFactory
             $schema,
             new MessageValidator($this->validator, $this->decoder),
             $this->serializer,
+            $logger,
             $config
         );
     }

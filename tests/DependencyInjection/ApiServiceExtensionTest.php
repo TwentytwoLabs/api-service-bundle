@@ -91,7 +91,7 @@ class ApiServiceExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             'api_service.schema_factory.cached_factory',
             1,
-            new Reference('api_service.schema_factory.swagger')
+            new Reference('api_service.schema_factory.open-api')
         );
     }
 
