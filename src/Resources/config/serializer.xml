@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="api_service.serializer.decoder.symfony" class="Symfony\Component\Serializer\Encoder\ChainDecoder" public="false" />
+
+        <service id="api_service.serializer.decoder" class="TwentytwoLabs\ApiValidator\Decoder\Adapter\SymfonyDecoderAdapter" public="false">
+            <argument type="service" id="api_service.serializer.decoder.symfony" />
+        </service>
+
+        <service id="api_service.denormalizer.resource" class="TwentytwoLabs\ApiServiceBundle\Denormalizer\ResourceDenormalizer" public="false">
+            <argument type="service" id="api_service.data_transformer" />
+            <tag name="serializer.normalizer" priority="-890" />
+        </service>
+
+        <service id="api_service.denormalizer.error" class="TwentytwoLabs\ApiServiceBundle\Denormalizer\ErrorDenormalizer" public="false">
+            <tag name="serializer.normalizer" priority="-890" />
+        </service>
+    </services>
+</container>

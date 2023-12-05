@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" bootstrap="./vendor/autoload.php" colors="true" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" verbose="true" stopOnFailure="false" processIsolation="false" backupGlobals="false" columns="max" beStrictAboutTestsThatDoNotTestAnything="true" beStrictAboutResourceUsageDuringSmallTests="true" beStrictAboutChangesToGlobalState="true">
-  <coverage>
-    <include>
-      <directory>./src/</directory>
-    </include>
-  </coverage>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.4/phpunit.xsd" bootstrap="./vendor/autoload.php" colors="true" stopOnFailure="false" processIsolation="false" backupGlobals="false" columns="max" beStrictAboutTestsThatDoNotTestAnything="true" beStrictAboutChangesToGlobalState="true" cacheDirectory=".phpunit.cache">
+  <coverage/>
   <testsuites>
     <testsuite name="Swagger Test Suite">
       <directory>tests</directory>
@@ -13,4 +9,9 @@
   <php>
     <server name="KERNEL_DIR" value="./tests/Resources/app"/>
   </php>
+  <source>
+    <include>
+      <directory>./src/</directory>
+    </include>
+  </source>
 </phpunit>

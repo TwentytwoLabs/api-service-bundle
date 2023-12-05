@@ -3,80 +3,86 @@
 namespace TwentytwoLabs\ApiServiceBundle\Tests\DependencyInjection;
 
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionConfigurationTestCase;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\UriFactoryInterface;
 use TwentytwoLabs\ApiServiceBundle\DependencyInjection\ApiServiceExtension;
 use TwentytwoLabs\ApiServiceBundle\DependencyInjection\Configuration;
 
-class ConfigurationTest extends AbstractExtensionConfigurationTestCase
+final class ConfigurationTest extends AbstractExtensionConfigurationTestCase
 {
-    public function testEmptyConfiguration()
+    public function testEmptyConfiguration(): void
     {
         $expectedEmptyConfig = [
             'default_services' => [
-                'client' => 'httplug.client',
-                'message_factory' => 'httplug.message_factory',
-                'uri_factory' => 'httplug.uri_factory',
+                'client' => ClientInterface::class,
+                'uri_factory' => UriFactoryInterface::class,
+                'request_factory' => RequestFactoryInterface::class,
+                'stream_factory' => StreamFactoryInterface::class,
+                'serializer' => 'serializer',
             ],
-            'cache' => [
-                'enabled' => false,
-            ],
-            'pagination' => [],
             'apis' => [],
-            'version' => 3,
         ];
-
-        $fixturesPath = __DIR__.'/../Resources/Fixtures';
 
         $this->assertProcessedConfigurationEquals(
             $expectedEmptyConfig,
-            [$fixturesPath.'/config/empty.yml']
+            [__DIR__.'/../Resources/Fixtures/config/empty.yml']
         );
     }
 
-    public function testSupportsAllConfigFormats()
+    public function testSupportsAllConfigFormats(): void
     {
         $expectedConfiguration = [
             'default_services' => [
                 'client' => 'httplug.client.acme',
                 'uri_factory' => 'my.uri_factory',
-                'message_factory' => 'my.message_factory',
-            ],
-            'cache' => [
-                'enabled' => true,
-                'service' => 'my.psr6_cache_impl',
-            ],
-            'pagination' => [
-                'header' => [
-                    'page' => 'X-Page',
-                    'perPage' => 'X-Per-Page',
-                    'totalPages' => 'X-Total-Pages',
-                    'totalItems' => 'X-Total-Items',
-                ],
+                'request_factory' => 'my.request_factory',
+                'stream_factory' => 'my.stream_factory',
+                'serializer' => 'serializer',
             ],
             'apis' => [
                 'foo' => [
                     'schema' => '/path/to/foo.yml',
                     'client' => 'api_service.client',
-                    'config' => [
-                        'baseUri' => null,
-                        'validateRequest' => true,
-                        'validateResponse' => false,
-                        'returnResponse' => false,
+                    'logger' => 'my.logger',
+                    'cache' => [
+                        'enabled' => true,
+                        'service' => 'my.psr6_cache_impl',
                     ],
-                    'logger' => 'logger',
+                    'pagination' => [
+                        'factory' => 'api_service.factory.pagination.header',
+                        'options' => [],
+                    ],
+                    'config' => [
+                        'validateRequest' => true,
+                        'validateResponse' => true,
+                        'returnResponse' => false,
+                        'baseUri' => 'https://foo.com',
+                    ],
+                    'version' => 3,
                 ],
                 'bar' => [
                     'schema' => '/path/to/bar.json',
                     'client' => 'httplug.client.bar',
-                    'config' => [
-                        'baseUri' => 'https://bar.com',
-                        'validateRequest' => false,
-                        'validateResponse' => true,
-                        'returnResponse' => true,
-                    ],
                     'logger' => 'logger',
+                    'cache' => [
+                        'enabled' => true,
+                        'service' => 'my.psr6_cache_impl',
+                    ],
+                    'pagination' => [
+                        'factory' => 'api_service.factory.pagination.header',
+                        'options' => [],
+                    ],
+                    'config' => [
+                        'validateRequest' => true,
+                        'validateResponse' => true,
+                        'returnResponse' => false,
+                        'baseUri' => 'https://bar.com',
+                    ],
+                    'version' => 3,
                 ],
             ],
-            'version' => 3,
         ];
 
         $fixturesPath = __DIR__.'/../Resources/Fixtures';

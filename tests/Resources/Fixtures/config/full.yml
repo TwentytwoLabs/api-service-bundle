@@ -1,20 +1,26 @@
 api_service:
   default_services:
     client: httplug.client.acme
-    message_factory: my.message_factory
     uri_factory: my.uri_factory
-  cache:
-    service: my.psr6_cache_impl
-  pagination:
-    header: ~
+    request_factory: my.request_factory
+    stream_factory: my.stream_factory
+    serializer: serializer
   apis:
     foo:
       schema: /path/to/foo.yml
+      logger: my.logger
+      cache:
+        service: my.psr6_cache_impl
+      pagination:
+        factory: 'api_service.factory.pagination.header'
+      config:
+        baseUri: https://foo.com
     bar:
       schema: /path/to/bar.json
       client: httplug.client.bar
+      cache:
+        service: my.psr6_cache_impl
+      pagination:
+        factory: 'api_service.factory.pagination.header'
       config:
         baseUri: https://bar.com
-        validateRequest: false
-        validateResponse: true
-        returnResponse: true
