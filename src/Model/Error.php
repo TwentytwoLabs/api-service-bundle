@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace TwentytwoLabs\ApiServiceBundle\Model;
 
-readonly class Error implements ErrorInterface
+class Error implements ErrorInterface
 {
     private int $code;
     private string $message;
