@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TwentytwoLabs\ApiServiceBundle\Tests\Factory;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
@@ -20,11 +21,11 @@ use TwentytwoLabs\ApiServiceBundle\Factory\RequestFactory;
 
 final class RequestFactoryTest extends TestCase
 {
-    private RequestFactoryInterface $requestFactory;
-    private UriTemplate $uriTemplate;
-    private UriFactoryInterface $uriFactory;
-    private StreamFactoryInterface $streamFactory;
-    private SerializerInterface $serializer;
+    private RequestFactoryInterface|MockObject $requestFactory;
+    private UriTemplate|MockObject $uriTemplate;
+    private UriFactoryInterface|MockObject $uriFactory;
+    private StreamFactoryInterface|MockObject $streamFactory;
+    private SerializerInterface|MockObject $serializer;
 
     protected function setUp(): void
     {
@@ -81,7 +82,11 @@ final class RequestFactoryTest extends TestCase
         ];
 
         $definition = $this->createMock(OperationDefinition::class);
-        $definition->expects($this->once())->method('getRequestParameters')->willReturn(new Parameters($requestParameters));
+        $definition
+            ->expects($this->once())
+            ->method('getRequestParameters')
+            ->willReturn(new Parameters($requestParameters))
+        ;
         $definition->expects($this->exactly(2))->method('getMethod')->willReturn('POST');
         $definition->expects($this->once())->method('getPathTemplate')->willReturn('/login_check');
         $params = [
@@ -149,7 +154,12 @@ final class RequestFactoryTest extends TestCase
         ;
         $request->expects($this->once())->method('withBody')->with($stream)->willReturnSelf();
 
-        $this->requestFactory->expects($this->once())->method('createRequest')->with('POST', $uri)->willReturn($request);
+        $this->requestFactory
+            ->expects($this->once())
+            ->method('createRequest')
+            ->with('POST', $uri)
+            ->willReturn($request)
+        ;
 
         $factory = $this->getFactory();
         $this->assertSame($request, $factory->createRequestFromDefinition($definition, 'http://example.org', $params));
@@ -201,7 +211,11 @@ final class RequestFactoryTest extends TestCase
         ];
 
         $definition = $this->createMock(OperationDefinition::class);
-        $definition->expects($this->once())->method('getRequestParameters')->willReturn(new Parameters($requestParameters));
+        $definition
+            ->expects($this->once())
+            ->method('getRequestParameters')
+            ->willReturn(new Parameters($requestParameters))
+        ;
         $definition->expects($this->exactly(2))->method('getMethod')->willReturn('POST');
         $definition->expects($this->once())->method('getPathTemplate')->willReturn('/login_check');
         $params = [
@@ -264,7 +278,12 @@ final class RequestFactoryTest extends TestCase
         ;
         $request->expects($this->once())->method('withBody')->with($stream)->willReturnSelf();
 
-        $this->requestFactory->expects($this->once())->method('createRequest')->with('POST', $uri)->willReturn($request);
+        $this->requestFactory
+            ->expects($this->once())
+            ->method('createRequest')
+            ->with('POST', $uri)
+            ->willReturn($request)
+        ;
 
         $factory = $this->getFactory();
         $this->assertSame($request, $factory->createRequestFromDefinition($definition, 'http://example.org', $params));

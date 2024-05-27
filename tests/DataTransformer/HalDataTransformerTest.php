@@ -17,6 +17,9 @@ final class HalDataTransformerTest extends TestCase
         $this->assertTrue($dataTransformer->support($contentType));
     }
 
+    /**
+     * @return array<int, array<int, string>>
+     */
     public static function getValidContentType(): array
     {
         return [
@@ -32,6 +35,9 @@ final class HalDataTransformerTest extends TestCase
         $this->assertFalse($dataTransformer->support($contentType));
     }
 
+    /**
+     * @return array<int, array<int, string>>
+     */
     public static function getInvalidContentType(): array
     {
         return [
@@ -40,6 +46,10 @@ final class HalDataTransformerTest extends TestCase
         ];
     }
 
+    /**
+     * @param array<int, array<string, mixed>> $expected
+     * @param array<string, mixed> $data
+     */
     #[DataProvider('getData')]
     public function testShouldTransform(array $expected, array $data): void
     {
@@ -47,6 +57,9 @@ final class HalDataTransformerTest extends TestCase
         $this->assertSame($expected, $dataTransformer->transform($data));
     }
 
+    /**
+     * @return array<string, array<int, mixed>>
+     */
     public static function getData(): array
     {
         return [

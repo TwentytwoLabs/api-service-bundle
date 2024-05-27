@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace TwentytwoLabs\ApiServiceBundle\Tests\DataTransformer;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use TwentytwoLabs\ApiServiceBundle\DataTransformer\DataTransformer;
 use TwentytwoLabs\ApiServiceBundle\DataTransformer\DataTransformerInterface;
 
 final class DataTransformerTest extends TestCase
 {
-    private DataTransformerInterface $fooDataTransformer;
-    private DataTransformerInterface $barDataTransformer;
+    private DataTransformerInterface|MockObject $fooDataTransformer;
+    private DataTransformerInterface|MockObject $barDataTransformer;
 
     protected function setUp(): void
     {
@@ -44,12 +45,18 @@ final class DataTransformerTest extends TestCase
             ->expects($this->once())
             ->method('transform')
             ->with([])
-            ->willReturn(['foo' => 'bar', 'bar' => 'baz'])
+            ->willReturn([
+                ['foo' => 'bar'],
+                ['bar' => 'baz'],
+            ])
         ;
 
         $dataTransformer = $this->getDataTransformer();
         $this->assertSame(
-            ['foo' => 'bar', 'bar' => 'baz'],
+            [
+                ['foo' => 'bar'],
+                ['bar' => 'baz'],
+            ],
             $dataTransformer->transform('json', [])
         );
     }

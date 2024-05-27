@@ -23,7 +23,7 @@ use TwentytwoLabs\ApiServiceBundle\Model\ErrorInterface;
 use TwentytwoLabs\ApiServiceBundle\Model\ResourceInterface;
 use TwentytwoLabs\ApiServiceBundle\Pagination\PaginationInterface;
 
-final class ApiService
+class ApiService
 {
     private RequestFactory $requestFactory;
     private MessageValidator $messageValidator;
@@ -32,8 +32,12 @@ final class ApiService
     private Schema $schema;
     private ?LoggerInterface $logger;
     private ?PaginationInterface $pagination;
+    /** @var array<string, mixed> */
     private array $config;
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function __construct(
         RequestFactory $requestFactory,
         MessageValidator $messageValidator,
@@ -54,6 +58,13 @@ final class ApiService
         $this->config = $config;
     }
 
+    /**
+     * @param array<string, mixed> $params
+     *
+     * @throws RequestViolations
+     * @throws ResponseViolations
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     */
     public function call(string $operationId = '', string $method = '', string $path = '', array $params = []): mixed
     {
         $operationDefinition = $this->schema->getOperationDefinition(
@@ -83,8 +94,17 @@ final class ApiService
         );
     }
 
-    public function callAsync(string $operationId = '', string $method = '', string $path = '', array $params = []): Promise
-    {
+    /**
+     * @param array<string, mixed> $params
+     *
+     * @throws \Exception
+     */
+    public function callAsync(
+        string $operationId = '',
+        string $method = '',
+        string $path = '',
+        array $params = []
+    ): Promise {
         if (!$this->client instanceof HttpAsyncClient) {
             throw new \RuntimeException(sprintf('"%s" does not support async request', get_class($this->client)));
         }
@@ -133,7 +153,7 @@ final class ApiService
         ResponseInterface $response,
         ResponseDefinition $definition,
         RequestInterface $request
-    ) {
+    ): mixed {
         if (true === $this->config['returnResponse']) {
             return $response;
         }

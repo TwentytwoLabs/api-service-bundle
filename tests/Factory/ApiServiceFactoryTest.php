@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TwentytwoLabs\ApiServiceBundle\Tests\Factory;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -16,9 +17,9 @@ use TwentytwoLabs\ApiServiceBundle\Factory\RequestFactory;
 
 final class ApiServiceFactoryTest extends TestCase
 {
-    private RequestFactory $requestFactory;
-    private MessageValidator $messageValidator;
-    private SerializerInterface $serializer;
+    private RequestFactory|MockObject $requestFactory;
+    private MessageValidator|MockObject $messageValidator;
+    private SerializerInterface|MockObject $serializer;
 
     protected function setUp(): void
     {

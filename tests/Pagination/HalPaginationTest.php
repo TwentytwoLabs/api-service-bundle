@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Pagination;
+namespace TwentytwoLabs\ApiServiceBundle\Tests\Pagination;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -22,6 +22,9 @@ final class HalPaginationTest extends TestCase
         $this->assertSame($expected, $pagination->support($response));
     }
 
+    /**
+     * @return array<int, array<int, boolean|string>>
+     */
     public static function getContentType(): array
     {
         return [
@@ -38,6 +41,13 @@ final class HalPaginationTest extends TestCase
         ];
     }
 
+    /**
+     * @param array<string, mixed> $data
+     * @param array<string, mixed> $paginationData
+     * @param array<string, mixed> $linksData
+     *
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     #[DataProvider('getDataPagination')]
     public function testShouldProvidePagination(array $data, array $paginationData, array $linksData): void
     {
@@ -66,6 +76,9 @@ final class HalPaginationTest extends TestCase
         $this->assertSame($linksData['last'], $links->getLast());
     }
 
+    /**
+     * @return array<string, array<int, mixed>>
+     */
     public static function getDataPagination(): array
     {
         return [

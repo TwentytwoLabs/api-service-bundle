@@ -24,6 +24,7 @@ final class ApiServiceBundleTest extends TestCase
                 match ($matcher->numberOfInvocations()) {
                     1 => $this->assertInstanceOf(FormatPass::class, $pass),
                     2 => $this->assertInstanceOf(DataTransformerPass::class, $pass),
+                    default => throw new \Exception(sprintf('Method "addCompilerPass" should call %d times', 2)),
                 };
 
                 return $container;

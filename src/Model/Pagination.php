@@ -12,8 +12,13 @@ class Pagination
     private int $totalPages;
     private ?PaginationLinks $links;
 
-    public function __construct(int $page, int $perPage, int $totalItems, int $totalPages, PaginationLinks $links = null)
-    {
+    public function __construct(
+        int $page,
+        int $perPage,
+        int $totalItems,
+        int $totalPages,
+        PaginationLinks $links = null
+    ) {
         $this->page = $page;
         $this->perPage = $perPage;
         $this->totalItems = $totalItems;

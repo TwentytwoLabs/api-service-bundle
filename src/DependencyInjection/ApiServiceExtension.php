@@ -21,7 +21,7 @@ final class ApiServiceExtension extends Extension
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('data-transformer.xml');
         $loader->load('pagination.xml');
         $loader->load('serializer.xml');
@@ -48,7 +48,7 @@ final class ApiServiceExtension extends Extension
             $schemaFactoryId = $this->configureApiServiceCache($container, $arguments['version'], $arguments['cache']);
 
             $container
-                ->register('api_service.api.'.$name, ApiService::class)
+                ->register(sprintf('api_service.api.%s', $name), ApiService::class)
                 ->setFactory([$serviceFactoryRef, 'getService'])
                 ->addArgument(new Reference($arguments['client']))
                 ->addArgument(new Reference($schemaFactoryId))
@@ -60,13 +60,16 @@ final class ApiServiceExtension extends Extension
             ;
 
             if (method_exists($container, 'registerAliasForArgument')) {
-                $container->registerAliasForArgument('api_service.api.'.$name, ApiService::class, $name);
+                $container->registerAliasForArgument(sprintf('api_service.api.%s', $name), ApiService::class, $name);
             }
         }
     }
 
-    private function configureApiServicePagination(ContainerBuilder $container, string $name, array $apiService): ?Definition
-    {
+    private function configureApiServicePagination(
+        ContainerBuilder $container,
+        string $name,
+        array $apiService
+    ): ?Definition {
         $pagination = $apiService['pagination'] ?? [];
         $paginationDef = null;
         if (!empty($pagination)) {

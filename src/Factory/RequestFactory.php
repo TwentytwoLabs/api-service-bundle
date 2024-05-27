@@ -36,10 +36,19 @@ class RequestFactory
         $this->serializer = $serializer;
     }
 
-    public function createRequestFromDefinition(OperationDefinition $definition, string $baseUri, array $params): RequestInterface
-    {
+    /**
+     * @param array<int|string, mixed> $params
+     */
+    public function createRequestFromDefinition(
+        OperationDefinition $definition,
+        string $baseUri,
+        array $params
+    ): RequestInterface {
         $requestParameters = $definition->getRequestParameters();
-        $parameters = 'PATCH' !== $definition->getMethod() ? $this->getDefaultValues($requestParameters) : [];
+        $parameters = ['path' => [], 'query' => [], 'headers' => [], 'body' => null, 'formData' => []];
+        if ('PATCH' !== $definition->getMethod()) {
+            $parameters = $this->getDefaultValues($requestParameters);
+        }
 
         foreach ($params as $name => $value) {
             $requestParameter = $requestParameters->getByName($name);
@@ -49,7 +58,7 @@ class RequestFactory
 
             if (\in_array($requestParameter->getLocation(), ['body', 'formData'])) {
                 $parameters[$requestParameter->getLocation()] = array_merge(
-                    $parameters[$requestParameter->getLocation()],
+                    $parameters[$requestParameter->getLocation()] ?? [],
                     $value
                 );
             } else {
@@ -76,6 +85,9 @@ class RequestFactory
         );
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getDefaultValues(Parameters $requestParameters): array
     {
         $parameters = ['path' => [], 'query' => [], 'headers' => [], 'body' => null, 'formData' => []];
@@ -88,7 +100,7 @@ class RequestFactory
 
                 $parameters['body'] = array_filter(array_map(function (array $params) {
                     return $params['default'] ?? null;
-                }, $schema['properties']));
+                }, $schema['properties'] ?? []));
             } else {
                 if (empty($schema['default'])) {
                     continue;
@@ -101,8 +113,15 @@ class RequestFactory
         return $parameters;
     }
 
-    private function createRequest(string $baseUri, string $method, string $pathTemplate, array $parameters): RequestInterface
-    {
+    /**
+     * @param array<int|string, mixed> $parameters
+     */
+    private function createRequest(
+        string $baseUri,
+        string $method,
+        string $pathTemplate,
+        array $parameters
+    ): RequestInterface {
         $path = $this->uriTemplate->expand($pathTemplate, $parameters['path']);
         $query = http_build_query($parameters['query']);
 

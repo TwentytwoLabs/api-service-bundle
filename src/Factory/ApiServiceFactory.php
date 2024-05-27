@@ -28,6 +28,9 @@ final class ApiServiceFactory
         $this->serializer = $serializer;
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function getService(
         ClientInterface $httpClient,
         SchemaFactoryInterface $schemaFactory,

@@ -8,7 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use TwentytwoLabs\ApiServiceBundle\Model\Pagination;
 use TwentytwoLabs\ApiServiceBundle\Model\PaginationLinks;
 
-class HalPagination implements PaginationInterface
+final class HalPagination implements PaginationInterface
 {
     public const DEFAULT_PAGINATION_VALUE = [
         self::TOTAL_PAGES => '_links.last.href.page',
@@ -17,6 +17,7 @@ class HalPagination implements PaginationInterface
         self::PER_PAGE => 'itemsPerPage',
     ];
 
+    /** @var array<string, mixed> */
     private array $paginationName;
 
     public function __construct()
@@ -56,14 +57,18 @@ class HalPagination implements PaginationInterface
         );
     }
 
-    private function getValue(array $items, array $values)
+    /**
+     * @param array<int|string, mixed> $items
+     * @param array<int|string, mixed> $values
+     */
+    private function getValue(array $items, array $values): ?int
     {
         $value = $items;
         foreach ($values as $item) {
             if (isset($value[$item])) {
                 $value = $value[$item];
             } elseif (is_string($value)) {
-                if (1 === preg_match('#'.$item.'=([^&]*)#', $value, $tab)) {
+                if (1 === preg_match(sprintf('#%s=([^&]*)#', $item), $value, $tab)) {
                     $value = (int) $tab[1];
                 } else {
                     return 1;

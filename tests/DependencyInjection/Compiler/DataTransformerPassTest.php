@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DependencyInjection\Compiler;
+namespace TwentytwoLabs\ApiServiceBundle\Tests\DependencyInjection\Compiler;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

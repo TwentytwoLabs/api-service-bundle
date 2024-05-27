@@ -8,10 +8,14 @@ use Psr\Http\Message\ResponseInterface;
 use TwentytwoLabs\ApiServiceBundle\Model\Pagination;
 use TwentytwoLabs\ApiServiceBundle\Model\PaginationLinks;
 
-class HeaderPagination implements PaginationInterface
+final class HeaderPagination implements PaginationInterface
 {
+    /** @var array<string, mixed> */
     private array $paginationHeaders;
 
+    /**
+     * @param array<string, mixed> $configs
+     */
     public function __construct(array $configs = [])
     {
         $this->paginationHeaders = $configs;
@@ -50,6 +54,11 @@ class HeaderPagination implements PaginationInterface
         );
     }
 
+    /**
+     * @param array<int, string> $headerLinks
+     *
+     * @return array<string, string|null>
+     */
     private static function parseHeaderLinks(array $headerLinks): array
     {
         $links = ['first' => '', 'last' => '', 'next' => null, 'prev' => null];

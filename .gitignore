@@ -1,6 +1,6 @@
-/composer.lock
-/vendor
-/build
-/phpstan.phar
-/coverage
-/log
+.php-cs-fixer.cache
+.phpunit.cache
+composer.lock
+coverage
+log
+vendor

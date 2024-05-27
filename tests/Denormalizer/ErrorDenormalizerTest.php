@@ -57,7 +57,8 @@ final class ErrorDenormalizerTest extends TestCase
         $denormalizer = $this->getDenormalizer();
         $error = $denormalizer->denormalize(
             ['violations' => $violations],
-            ErrorDenormalizer::class, null,
+            ErrorDenormalizer::class,
+            null,
             ['response' => $response]
         );
 
@@ -65,6 +66,18 @@ final class ErrorDenormalizerTest extends TestCase
         $this->assertSame('Bad Request', $error->getMessage());
         $this->assertSame($violations, $error->getViolations());
         $this->assertSame(400, $error->getCode());
+    }
+
+    public function testShouldValidateSupportedTypes(): void
+    {
+        $denormalizer = $this->getDenormalizer();
+        $this->assertSame(
+            [
+                '*' => false,
+                ErrorInterface::class => true,
+            ],
+            $denormalizer->getSupportedTypes(null)
+        );
     }
 
     private function getDenormalizer(): ErrorDenormalizer

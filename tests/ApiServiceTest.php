@@ -6,6 +6,7 @@ namespace TwentytwoLabs\ApiServiceBundle\Tests;
 
 use Http\Client\HttpAsyncClient;
 use Http\Promise\FulfilledPromise;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
@@ -28,15 +29,15 @@ use TwentytwoLabs\ApiServiceBundle\Pagination\PaginationInterface;
 
 final class ApiServiceTest extends TestCase
 {
-    private RequestFactory $requestFactory;
-    private MessageValidator $messageValidator;
-    private SerializerInterface $serializer;
-    private ClientInterface|HttpAsyncClient $client;
-    private Schema $schema;
-    private ?LoggerInterface $logger;
-    private ?PaginationInterface $pagination;
+    private RequestFactory|MockObject $requestFactory;
+    private MessageValidator|MockObject $messageValidator;
+    private SerializerInterface|MockObject $serializer;
+    private ClientInterface|HttpAsyncClient|MockObject $client;
+    private Schema|MockObject $schema;
+    private LoggerInterface|MockObject $logger;
+    private PaginationInterface|MockObject $pagination;
 
-    private HttpAsyncClient $clientAsync;
+    private HttpAsyncClient|MockObject $clientAsync;
 
     protected function setUp(): void
     {

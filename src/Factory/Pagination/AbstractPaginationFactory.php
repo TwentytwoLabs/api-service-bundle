@@ -8,6 +8,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractPaginationFactory implements PaginationFactoryInterface
 {
+    /**
+     * @param array<int|string, mixed> $options
+     *
+     * @return array<int|string, mixed>
+     * @throws \Exception
+     */
     protected function validate(string $name, array $options): array
     {
         $resolver = new OptionsResolver();
@@ -17,9 +23,9 @@ abstract class AbstractPaginationFactory implements PaginationFactoryInterface
             return $resolver->resolve($options);
         } catch (\Exception $e) {
             $message = sprintf(
-                'Error while configure pagination %s. Verify your configuration at "twenty-two-labs.api_service.%s.pagination.options". %s',
+                'Error while configure pagination %s. Verify your configuration at "%s". %s',
                 $name,
-                $name,
+                sprintf('twenty-two-labs.api_service.%s.pagination.options', $name),
                 $e->getMessage()
             );
 

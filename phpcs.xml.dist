@@ -12,11 +12,10 @@
     <!-- Ignore warnings and show progress of the run -->
     <arg value="np"/>
 
-    <rule ref="PSR2"/>
+    <rule ref="PSR12"/>
 
     <file>./src</file>
     <file>./tests/DependencyInjection</file>
     <file>./tests/Factory</file>
     <file>./tests/Pagination</file>
 </ruleset>
-

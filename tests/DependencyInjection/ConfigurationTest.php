@@ -27,7 +27,7 @@ final class ConfigurationTest extends AbstractExtensionConfigurationTestCase
 
         $this->assertProcessedConfigurationEquals(
             $expectedEmptyConfig,
-            [__DIR__.'/../Resources/Fixtures/config/empty.yml']
+            [__DIR__ . '/../Resources/Fixtures/config/empty.yml']
         );
     }
 

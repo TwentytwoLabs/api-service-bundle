@@ -10,5 +10,8 @@ interface ErrorInterface
 
     public function getMessage(): string;
 
+    /**
+     * @return array<int, array<string, string>>
+     */
     public function getViolations(): array;
 }

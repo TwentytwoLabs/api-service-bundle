@@ -23,13 +23,23 @@ final class ResourceDenormalizer implements DenormalizerInterface
         $this->dataTransformer = $dataTransformer;
     }
 
-    public function supportsDenormalization(mixed $data, string $type, string $format = null): bool
+    /**
+     * @param array<int|string, mixed> $context
+     */
+    public function supportsDenormalization(mixed $data, string $type, string $format = null, array $context = []): bool
     {
         return ResourceInterface::class === $type;
     }
 
-    public function denormalize(mixed $data, string $type, string $format = null, array $context = []): ResourceInterface
-    {
+    /**
+     * @param array<int|string, mixed> $context
+     */
+    public function denormalize(
+        mixed $data,
+        string $type,
+        string $format = null,
+        array $context = []
+    ): ResourceInterface {
         /** @var ResponseInterface $response */
         $response = $context['response'];
 
@@ -43,14 +53,17 @@ final class ResourceDenormalizer implements DenormalizerInterface
         $pagination = $context['pagination'];
 
         if (!$definition->hasBodySchema()) {
-            throw new \LogicException(sprintf('Cannot transform the response into a resource. You need to provide a schema for response %d in %s %s', $response->getStatusCode(), $request->getMethod(), $request->getUri()->getPath()));
+            throw new \LogicException(sprintf(
+                'Cannot transform the response into a resource. You need to provide a schema for response %d in %s %s',
+                $response->getStatusCode(),
+                $request->getMethod(),
+                $request->getUri()->getPath()
+            ));
         }
 
         $bodySchema = $this->getBodySchema($definition->getBodySchema(), $response->getHeaderLine('Content-Type'));
         if ('array' === $this->getSchemaType($bodySchema)) {
-            if ($pagination?->support($response)) {
-                $pagination = $pagination->getPagination($data, $response);
-            }
+            $pagination = $pagination?->support($response) ? $pagination->getPagination($data, $response) : null;
 
             return new Collection(
                 data: $this->dataTransformer->transform($response->getHeaderLine('Content-Type'), $data),
@@ -65,6 +78,9 @@ final class ResourceDenormalizer implements DenormalizerInterface
         );
     }
 
+    /**
+     * @param array<string, mixed> $schema
+     */
     private function getSchemaType(array $schema): string
     {
         $type = $schema['x-type'] ?? $schema['type'] ?? null;
@@ -76,6 +92,11 @@ final class ResourceDenormalizer implements DenormalizerInterface
         return $type;
     }
 
+    /**
+     * @param array<int|string, mixed> $contentSchemata
+     *
+     * @return array<int|string, mixed>
+     */
     private function getBodySchema(array $contentSchemata, string $responseContentType): array
     {
         $responseContentType = current(explode(';', $responseContentType));
@@ -89,5 +110,16 @@ final class ResourceDenormalizer implements DenormalizerInterface
         }
 
         return [];
+    }
+
+    /**
+     * @return array<string, boolean>
+     */
+    public function getSupportedTypes(?string $format): array
+    {
+        return [
+            '*' => false,
+            ResourceInterface::class => true,
+        ];
     }
 }

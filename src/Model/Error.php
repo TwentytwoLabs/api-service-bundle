@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace TwentytwoLabs\ApiServiceBundle\Model;
 
-class Error implements ErrorInterface
+final class Error implements ErrorInterface
 {
     private int $code;
     private string $message;
+    /** @var array<int, array<string, string>> */
     private array $violations;
 
+    /**
+     * @param array<int, array<string, string>> $violations
+     */
     public function __construct(int $code, string $message, array $violations)
     {
         $this->code = $code;

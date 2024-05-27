@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace TwentytwoLabs\ApiServiceBundle\Tests\Denormalizer;
 
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
+use TwentytwoLabs\ApiServiceBundle\Model\ErrorInterface;
 use TwentytwoLabs\ApiValidator\Definition\ResponseDefinition;
 use TwentytwoLabs\ApiServiceBundle\DataTransformer\DataTransformer;
 use TwentytwoLabs\ApiServiceBundle\Denormalizer\ErrorDenormalizer;
@@ -21,7 +23,7 @@ use TwentytwoLabs\ApiServiceBundle\Pagination\PaginationInterface;
 
 final class ResourceDenormalizerTest extends TestCase
 {
-    private DataTransformer $dataTransformer;
+    private DataTransformer|MockObject $dataTransformer;
 
     protected function setUp(): void
     {
@@ -116,6 +118,9 @@ final class ResourceDenormalizerTest extends TestCase
         );
     }
 
+    /**
+     * @return array<int, array<int, mixed>>
+     */
     public static function getValidBodySchemes(): array
     {
         return [
@@ -180,8 +185,14 @@ final class ResourceDenormalizerTest extends TestCase
         ];
     }
 
+    /**
+     * @param array<int, mixed> $bodySchema
+     *
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     */
     #[DataProvider('getValidBodySchemes')]
-    public function testShouldProvideAResourceOfTypeItem(array $bodySchema)
+    public function testShouldProvideAResourceOfTypeItem(array $bodySchema): void
     {
         $response = $this->createMock(ResponseInterface::class);
         $response
@@ -890,6 +901,18 @@ final class ResourceDenormalizerTest extends TestCase
                 ],
             ],
             $resource->getIterator()->getArrayCopy()
+        );
+    }
+
+    public function testShouldValidateSupportedTypes(): void
+    {
+        $denormalizer = $this->getDenormalizer();
+        $this->assertSame(
+            [
+                '*' => false,
+                ResourceInterface::class => true,
+            ],
+            $denormalizer->getSupportedTypes(null)
         );
     }
 

@@ -11,6 +11,11 @@ final class HalDataTransformer implements DataTransformerInterface
         return 1 === preg_match('#hal#', $type);
     }
 
+    /**
+     * @param array<int|string, mixed> $data
+     *
+     * @return array<int|string, mixed>
+     */
     public function transform(array $data): array
     {
         return array_map(function ($data) {
@@ -21,6 +26,11 @@ final class HalDataTransformer implements DataTransformerInterface
         }, $data['_embedded']['item'] ?? []);
     }
 
+    /**
+     * @param array<int|string, mixed> $items
+     *
+     * @return array<int|string, mixed>
+     */
     private function removeEmbedded(array $items): array
     {
         unset($items['_links']);
