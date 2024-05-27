@@ -15,6 +15,10 @@ final class Collection implements ResourceInterface, \IteratorAggregate
     private array $meta;
     protected ?Pagination $pagination;
 
+    /**
+     * @param array<int|string, mixed> $data
+     * @param array<int|string, mixed> $meta
+     */
     public function __construct(array $data, array $meta, Pagination $pagination = null)
     {
         $this->data = $data;
