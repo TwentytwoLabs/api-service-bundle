@@ -45,7 +45,7 @@ class RequestFactory
         array $params
     ): RequestInterface {
         $requestParameters = $definition->getRequestParameters();
-        $parameters = ['path' => [], 'query' => [], 'headers' => [], 'body' => null, 'formData' => []];
+        $parameters = [];
         if ('PATCH' !== $definition->getMethod()) {
             $parameters = $this->getDefaultValues($requestParameters);
         }
@@ -90,7 +90,7 @@ class RequestFactory
      */
     private function getDefaultValues(Parameters $requestParameters): array
     {
-        $parameters = ['path' => [], 'query' => [], 'headers' => [], 'body' => null, 'formData' => []];
+        $parameters = [];
 
         foreach ($requestParameters as $name => $requestParameter) {
             $schema = $requestParameter->getSchema();
@@ -106,7 +106,9 @@ class RequestFactory
                     continue;
                 }
 
-                $parameters[$requestParameter->getLocation()][$name] = $schema['default'];
+                if ($requestParameter->isRequired()) {
+                    $parameters[$requestParameter->getLocation()][$name] = $schema['default'];
+                }
             }
         }
 
@@ -122,8 +124,8 @@ class RequestFactory
         string $pathTemplate,
         array $parameters
     ): RequestInterface {
-        $path = $this->uriTemplate->expand($pathTemplate, $parameters['path']);
-        $query = http_build_query($parameters['query']);
+        $path = $this->uriTemplate->expand($pathTemplate, $parameters['path'] ?? []);
+        $query = http_build_query($parameters['query'] ?? []);
 
         $request = $this->requestFactory->createRequest(
             $method,
