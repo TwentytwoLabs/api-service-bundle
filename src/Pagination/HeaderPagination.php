@@ -65,7 +65,7 @@ final class HeaderPagination implements PaginationInterface
 
         foreach ($headerLinks as $headerLink) {
             if (1 === preg_match('/rel="([^"]+)"/', $headerLink, $matches)) {
-                if (\in_array($matches[1] ?? '', ['next', 'prev', 'first', 'last'])) {
+                if (\in_array($matches[1], ['next', 'prev', 'first', 'last'])) {
                     $parts = explode(';', $headerLink);
                     $links[$matches[1]] = trim($parts[0], ' <>');
                 }
