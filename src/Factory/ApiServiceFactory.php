@@ -8,6 +8,7 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use TwentytwoLabs\ApiValidator\Factory\SchemaFactoryInterface;
+use TwentytwoLabs\ApiValidator\Schema;
 use TwentytwoLabs\ApiValidator\Validator\MessageValidator;
 use TwentytwoLabs\ApiServiceBundle\ApiService;
 use TwentytwoLabs\ApiServiceBundle\Pagination\PaginationInterface;
@@ -33,8 +34,7 @@ final class ApiServiceFactory
      */
     public function getService(
         ClientInterface $httpClient,
-        SchemaFactoryInterface $schemaFactory,
-        string $schemaFile,
+        Schema $schema,
         LoggerInterface $logger = null,
         PaginationInterface $pagination = null,
         array $config = []
@@ -44,7 +44,7 @@ final class ApiServiceFactory
             $this->messageValidator,
             $this->serializer,
             $httpClient,
-            $schemaFactory->createSchema($schemaFile),
+            $schema,
             $logger,
             $pagination,
             $config

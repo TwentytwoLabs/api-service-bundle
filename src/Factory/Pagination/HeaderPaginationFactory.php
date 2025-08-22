@@ -18,8 +18,8 @@ final class HeaderPaginationFactory extends AbstractPaginationFactory
     protected function configureOptionResolver(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            PaginationInterface::TOTAL_PAGES => 'X-Total-Items',
-            PaginationInterface::TOTAL_ITEMS => 'X-Total-Pages',
+            PaginationInterface::TOTAL_ITEMS => 'X-Total-Items',
+            PaginationInterface::TOTAL_PAGES => 'X-Total-Pages',
             PaginationInterface::PAGE => 'X-Page',
             PaginationInterface::PER_PAGE => 'X-Per-Page',
         ]);

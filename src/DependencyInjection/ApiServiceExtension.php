@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use TwentytwoLabs\ApiServiceBundle\ApiService;
 use TwentytwoLabs\ApiServiceBundle\Pagination\PaginationInterface;
+use TwentytwoLabs\ApiValidator\Schema;
 
 final class ApiServiceExtension extends Extension
 {
@@ -48,11 +49,16 @@ final class ApiServiceExtension extends Extension
             $schemaFactoryId = $this->configureApiServiceCache($container, $arguments['version'], $arguments['cache']);
 
             $container
+                ->register(sprintf('api_service.schema.%s', $name), Schema::class)
+                ->setFactory([new Reference($schemaFactoryId), 'createSchema'])
+                ->addArgument($arguments['schema'])
+            ;
+
+            $container
                 ->register(sprintf('api_service.api.%s', $name), ApiService::class)
                 ->setFactory([$serviceFactoryRef, 'getService'])
                 ->addArgument(new Reference($arguments['client']))
-                ->addArgument(new Reference($schemaFactoryId))
-                ->addArgument($arguments['schema'])
+                ->addArgument(new Reference(sprintf('api_service.schema.%s', $name)))
                 ->addArgument(new Reference($arguments['logger'], ContainerInterface::NULL_ON_INVALID_REFERENCE))
                 ->addArgument($paginationDef)
                 ->addArgument($arguments['config'])
@@ -61,6 +67,7 @@ final class ApiServiceExtension extends Extension
 
             if (method_exists($container, 'registerAliasForArgument')) {
                 $container->registerAliasForArgument(sprintf('api_service.api.%s', $name), ApiService::class, $name);
+                $container->registerAliasForArgument(sprintf('api_service.schema.%s', $name), Schema::class, $name);
             }
         }
     }
