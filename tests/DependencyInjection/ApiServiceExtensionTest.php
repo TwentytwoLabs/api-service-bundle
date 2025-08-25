@@ -69,19 +69,26 @@ final class ApiServiceExtensionTest extends AbstractExtensionTestCase
         ]);
 
         $this->assertContainerBuilderHasService('api_service.api.foo');
+        $this->assertContainerBuilderHasService('api_service.schema.foo');
+
+        $definition = $this->container->findDefinition('api_service.schema.foo');
+        $this->assertSame('TwentytwoLabs\ApiValidator\Schema', $definition->getClass());
+        $this->assertSame('api_service.schema_factory.open-api', (string) $definition->getFactory()[0]);
+        $this->assertSame('createSchema', (string) $definition->getFactory()[1]);
+
+        $this->assertSame(['/path/to/schema.json'], $definition->getArguments());
 
         $definition = $this->container->findDefinition('api_service.api.foo');
         $this->assertSame('api_service.factory', (string) $definition->getFactory()[0]);
         $this->assertSame('getService', (string) $definition->getFactory()[1]);
 
         $this->assertSame('api_service.client', (string) $definition->getArgument(0));
-        $this->assertSame('api_service.schema_factory.open-api', (string) $definition->getArgument(1));
-        $this->assertSame('/path/to/schema.json', (string) $definition->getArgument(2));
-        $this->assertSame('logger', (string) $definition->getArgument(3));
-        $this->assertNull($definition->getArgument(4));
+        $this->assertSame('api_service.schema.foo', (string) $definition->getArgument(1));
+        $this->assertSame('logger', (string) $definition->getArgument(2));
+        $this->assertNull($definition->getArgument(3));
         $this->assertSame(
             ['validateRequest' => true, 'validateResponse' => true, 'returnResponse' => false],
-            $definition->getArgument(5)
+            $definition->getArgument(4)
         );
 
         $definition = $this->container->findDefinition('api_service.api.foo');
@@ -90,8 +97,11 @@ final class ApiServiceExtensionTest extends AbstractExtensionTestCase
 
         $this->assertContainerBuilderHasAlias('TwentytwoLabs\ApiServiceBundle\ApiService $foo');
         $alias = $this->container->getAlias('TwentytwoLabs\ApiServiceBundle\ApiService $foo');
-        $this->assertInstanceOf(Alias::class, $alias);
         $this->assertSame('api_service.api.foo', (string) $alias);
+
+        $this->assertContainerBuilderHasAlias('TwentytwoLabs\ApiValidator\Schema $foo');
+        $alias = $this->container->getAlias('TwentytwoLabs\ApiValidator\Schema $foo');
+        $this->assertSame('api_service.schema.foo', (string) $alias);
     }
 
     public function testShouldProvideApiServicesWithoutPaginationAndWithoutCacheForSwagger(): void
@@ -106,19 +116,26 @@ final class ApiServiceExtensionTest extends AbstractExtensionTestCase
         ]);
 
         $this->assertContainerBuilderHasService('api_service.api.foo');
+        $this->assertContainerBuilderHasService('api_service.schema.foo');
+
+        $definition = $this->container->findDefinition('api_service.schema.foo');
+        $this->assertSame('TwentytwoLabs\ApiValidator\Schema', $definition->getClass());
+        $this->assertSame('api_service.schema_factory.swagger', (string) $definition->getFactory()[0]);
+        $this->assertSame('createSchema', (string) $definition->getFactory()[1]);
+
+        $this->assertSame(['/path/to/schema.json'], $definition->getArguments());
 
         $definition = $this->container->findDefinition('api_service.api.foo');
         $this->assertSame('api_service.factory', (string) $definition->getFactory()[0]);
         $this->assertSame('getService', (string) $definition->getFactory()[1]);
 
         $this->assertSame('api_service.client', (string) $definition->getArgument(0));
-        $this->assertSame('api_service.schema_factory.swagger', (string) $definition->getArgument(1));
-        $this->assertSame('/path/to/schema.json', (string) $definition->getArgument(2));
-        $this->assertSame('logger', (string) $definition->getArgument(3));
-        $this->assertNull($definition->getArgument(4));
+        $this->assertSame('api_service.schema.foo', (string) $definition->getArgument(1));
+        $this->assertSame('logger', (string) $definition->getArgument(2));
+        $this->assertNull($definition->getArgument(3));
         $this->assertSame(
             ['validateRequest' => true, 'validateResponse' => true, 'returnResponse' => false],
-            $definition->getArgument(5)
+            $definition->getArgument(4)
         );
 
         $definition = $this->container->findDefinition('api_service.api.foo');
@@ -127,8 +144,11 @@ final class ApiServiceExtensionTest extends AbstractExtensionTestCase
 
         $this->assertContainerBuilderHasAlias('TwentytwoLabs\ApiServiceBundle\ApiService $foo');
         $alias = $this->container->getAlias('TwentytwoLabs\ApiServiceBundle\ApiService $foo');
-        $this->assertInstanceOf(Alias::class, $alias);
         $this->assertSame('api_service.api.foo', (string) $alias);
+
+        $this->assertContainerBuilderHasAlias('TwentytwoLabs\ApiValidator\Schema $foo');
+        $alias = $this->container->getAlias('TwentytwoLabs\ApiValidator\Schema $foo');
+        $this->assertSame('api_service.schema.foo', (string) $alias);
     }
 
     public function testShouldProvideApiServicesWithPaginationAndWithoutCache(): void
@@ -146,17 +166,24 @@ final class ApiServiceExtensionTest extends AbstractExtensionTestCase
         ]);
 
         $this->assertContainerBuilderHasService('api_service.api.foo');
+        $this->assertContainerBuilderHasService('api_service.schema.foo');
+
+        $definition = $this->container->findDefinition('api_service.schema.foo');
+        $this->assertSame('TwentytwoLabs\ApiValidator\Schema', $definition->getClass());
+        $this->assertSame('api_service.schema_factory.open-api', (string) $definition->getFactory()[0]);
+        $this->assertSame('createSchema', (string) $definition->getFactory()[1]);
+
+        $this->assertSame(['/path/to/schema.json'], $definition->getArguments());
 
         $definition = $this->container->findDefinition('api_service.api.foo');
         $this->assertSame('api_service.factory', (string) $definition->getFactory()[0]);
         $this->assertSame('getService', (string) $definition->getFactory()[1]);
 
         $this->assertSame('api_service.client', (string) $definition->getArgument(0));
-        $this->assertSame('api_service.schema_factory.open-api', (string) $definition->getArgument(1));
-        $this->assertSame('/path/to/schema.json', (string) $definition->getArgument(2));
-        $this->assertSame('logger', (string) $definition->getArgument(3));
+        $this->assertSame('api_service.schema.foo', (string) $definition->getArgument(1));
+        $this->assertSame('logger', (string) $definition->getArgument(2));
 
-        $paginationRef = $definition->getArgument(4);
+        $paginationRef = $definition->getArgument(3);
 
         $this->assertInstanceOf(Definition::class, $paginationRef);
         $this->assertSame('api_service.factory.pagination.header', (string) $paginationRef->getFactory()[0]);
@@ -167,7 +194,7 @@ final class ApiServiceExtensionTest extends AbstractExtensionTestCase
 
         $this->assertSame(
             ['validateRequest' => true, 'validateResponse' => true, 'returnResponse' => false],
-            $definition->getArgument(5)
+            $definition->getArgument(4)
         );
 
         $definition = $this->container->findDefinition('api_service.api.foo');
@@ -176,8 +203,11 @@ final class ApiServiceExtensionTest extends AbstractExtensionTestCase
 
         $this->assertContainerBuilderHasAlias('TwentytwoLabs\ApiServiceBundle\ApiService $foo');
         $alias = $this->container->getAlias('TwentytwoLabs\ApiServiceBundle\ApiService $foo');
-        $this->assertInstanceOf(Alias::class, $alias);
         $this->assertSame('api_service.api.foo', (string) $alias);
+
+        $this->assertContainerBuilderHasAlias('TwentytwoLabs\ApiValidator\Schema $foo');
+        $alias = $this->container->getAlias('TwentytwoLabs\ApiValidator\Schema $foo');
+        $this->assertSame('api_service.schema.foo', (string) $alias);
     }
 
     public function testShouldProvideApiServicesWithPaginationAndWithoutCacheForSwagger(): void
@@ -196,17 +226,24 @@ final class ApiServiceExtensionTest extends AbstractExtensionTestCase
         ]);
 
         $this->assertContainerBuilderHasService('api_service.api.foo');
+        $this->assertContainerBuilderHasService('api_service.schema.foo');
+
+        $definition = $this->container->findDefinition('api_service.schema.foo');
+        $this->assertSame('TwentytwoLabs\ApiValidator\Schema', $definition->getClass());
+        $this->assertSame('api_service.schema_factory.swagger', (string) $definition->getFactory()[0]);
+        $this->assertSame('createSchema', (string) $definition->getFactory()[1]);
+
+        $this->assertSame(['/path/to/schema.json'], $definition->getArguments());
 
         $definition = $this->container->findDefinition('api_service.api.foo');
         $this->assertSame('api_service.factory', (string) $definition->getFactory()[0]);
         $this->assertSame('getService', (string) $definition->getFactory()[1]);
 
         $this->assertSame('api_service.client', (string) $definition->getArgument(0));
-        $this->assertSame('api_service.schema_factory.swagger', (string) $definition->getArgument(1));
-        $this->assertSame('/path/to/schema.json', (string) $definition->getArgument(2));
-        $this->assertSame('logger', (string) $definition->getArgument(3));
+        $this->assertSame('api_service.schema.foo', (string) $definition->getArgument(1));
+        $this->assertSame('logger', (string) $definition->getArgument(2));
 
-        $paginationRef = $definition->getArgument(4);
+        $paginationRef = $definition->getArgument(3);
 
         $this->assertInstanceOf(Definition::class, $paginationRef);
         $this->assertSame('api_service.factory.pagination.header', (string) $paginationRef->getFactory()[0]);
@@ -217,7 +254,7 @@ final class ApiServiceExtensionTest extends AbstractExtensionTestCase
 
         $this->assertSame(
             ['validateRequest' => true, 'validateResponse' => true, 'returnResponse' => false],
-            $definition->getArgument(5)
+            $definition->getArgument(4)
         );
 
         $definition = $this->container->findDefinition('api_service.api.foo');
@@ -226,8 +263,11 @@ final class ApiServiceExtensionTest extends AbstractExtensionTestCase
 
         $this->assertContainerBuilderHasAlias('TwentytwoLabs\ApiServiceBundle\ApiService $foo');
         $alias = $this->container->getAlias('TwentytwoLabs\ApiServiceBundle\ApiService $foo');
-        $this->assertInstanceOf(Alias::class, $alias);
         $this->assertSame('api_service.api.foo', (string) $alias);
+
+        $this->assertContainerBuilderHasAlias('TwentytwoLabs\ApiValidator\Schema $foo');
+        $alias = $this->container->getAlias('TwentytwoLabs\ApiValidator\Schema $foo');
+        $this->assertSame('api_service.schema.foo', (string) $alias);
     }
 
     public function testShouldProvideApiServicesWithCache(): void
@@ -245,25 +285,35 @@ final class ApiServiceExtensionTest extends AbstractExtensionTestCase
         ]);
 
         $this->assertContainerBuilderHasService('api_service.api.foo');
+        $this->assertContainerBuilderHasService('api_service.schema.foo');
+
+        $definition = $this->container->findDefinition('api_service.schema.foo');
+        $this->assertSame('TwentytwoLabs\ApiValidator\Schema', $definition->getClass());
+        $this->assertSame('api_service.schema_factory.cached_factory', (string) $definition->getFactory()[0]);
+        $this->assertSame('createSchema', (string) $definition->getFactory()[1]);
+
+        $this->assertSame(['/path/to/schema.json'], $definition->getArguments());
 
         $definition = $this->container->findDefinition('api_service.api.foo');
         $this->assertSame('api_service.factory', (string) $definition->getFactory()[0]);
         $this->assertSame('getService', (string) $definition->getFactory()[1]);
 
         $this->assertSame('api_service.client', (string) $definition->getArgument(0));
-        $this->assertSame('api_service.schema_factory.cached_factory', (string) $definition->getArgument(1));
-        $this->assertSame('/path/to/schema.json', (string) $definition->getArgument(2));
-        $this->assertSame('logger', (string) $definition->getArgument(3));
-        $this->assertNull($definition->getArgument(4));
+        $this->assertSame('api_service.schema.foo', (string) $definition->getArgument(1));
+        $this->assertSame('logger', (string) $definition->getArgument(2));
+        $this->assertNull($definition->getArgument(3));
         $this->assertSame(
             ['validateRequest' => true, 'validateResponse' => true, 'returnResponse' => false],
-            $definition->getArgument(5)
+            $definition->getArgument(4)
         );
 
         $this->assertContainerBuilderHasAlias('TwentytwoLabs\ApiServiceBundle\ApiService $foo');
         $alias = $this->container->getAlias('TwentytwoLabs\ApiServiceBundle\ApiService $foo');
-        $this->assertInstanceOf(Alias::class, $alias);
         $this->assertSame('api_service.api.foo', (string) $alias);
+
+        $this->assertContainerBuilderHasAlias('TwentytwoLabs\ApiValidator\Schema $foo');
+        $alias = $this->container->getAlias('TwentytwoLabs\ApiValidator\Schema $foo');
+        $this->assertSame('api_service.schema.foo', (string) $alias);
 
         $cachedFactory = $this->container->findDefinition('api_service.schema_factory.cached_factory');
         $this->assertSame('my.psr6_cache_impl', (string) $cachedFactory->getArgument(0));
@@ -286,25 +336,33 @@ final class ApiServiceExtensionTest extends AbstractExtensionTestCase
         ]);
 
         $this->assertContainerBuilderHasService('api_service.api.foo');
+        $this->assertContainerBuilderHasService('api_service.schema.foo');
+
+        $definition = $this->container->findDefinition('api_service.schema.foo');
+        $this->assertSame('TwentytwoLabs\ApiValidator\Schema', $definition->getClass());
+        $this->assertSame('api_service.schema_factory.cached_factory', (string) $definition->getFactory()[0]);
+        $this->assertSame('createSchema', (string) $definition->getFactory()[1]);
 
         $definition = $this->container->findDefinition('api_service.api.foo');
         $this->assertSame('api_service.factory', (string) $definition->getFactory()[0]);
         $this->assertSame('getService', (string) $definition->getFactory()[1]);
 
         $this->assertSame('api_service.client', (string) $definition->getArgument(0));
-        $this->assertSame('api_service.schema_factory.cached_factory', (string) $definition->getArgument(1));
-        $this->assertSame('/path/to/schema.json', (string) $definition->getArgument(2));
-        $this->assertSame('logger', (string) $definition->getArgument(3));
-        $this->assertNull($definition->getArgument(4));
+        $this->assertSame('api_service.schema.foo', (string) $definition->getArgument(1));
+        $this->assertSame('logger', (string) $definition->getArgument(2));
+        $this->assertNull($definition->getArgument(3));
         $this->assertSame(
             ['validateRequest' => true, 'validateResponse' => true, 'returnResponse' => false],
-            $definition->getArgument(5)
+            $definition->getArgument(4)
         );
 
         $this->assertContainerBuilderHasAlias('TwentytwoLabs\ApiServiceBundle\ApiService $foo');
         $alias = $this->container->getAlias('TwentytwoLabs\ApiServiceBundle\ApiService $foo');
-        $this->assertInstanceOf(Alias::class, $alias);
         $this->assertSame('api_service.api.foo', (string) $alias);
+
+        $this->assertContainerBuilderHasAlias('TwentytwoLabs\ApiValidator\Schema $foo');
+        $alias = $this->container->getAlias('TwentytwoLabs\ApiValidator\Schema $foo');
+        $this->assertSame('api_service.schema.foo', (string) $alias);
 
         $cachedFactory = $this->container->findDefinition('api_service.schema_factory.cached_factory');
         $this->assertSame('my.psr6_cache_impl', (string) $cachedFactory->getArgument(0));

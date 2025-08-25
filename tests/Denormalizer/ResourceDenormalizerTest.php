@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
-use TwentytwoLabs\ApiServiceBundle\Model\ErrorInterface;
 use TwentytwoLabs\ApiValidator\Definition\ResponseDefinition;
 use TwentytwoLabs\ApiServiceBundle\DataTransformer\DataTransformer;
 use TwentytwoLabs\ApiServiceBundle\Denormalizer\ErrorDenormalizer;
@@ -235,7 +234,6 @@ final class ResourceDenormalizerTest extends TestCase
         );
 
         $this->assertInstanceOf(Item::class, $resource);
-        $this->assertNotInstanceOf(Collection::class, $resource);
         $this->assertSame(['title' => 'bar', 'type' => 'avatar', 'alternativeText' => 'foo'], $resource->getData());
         $this->assertSame(
             ['headers' => ['Content-Type' => ['application/json', 'application/hal+json']]],

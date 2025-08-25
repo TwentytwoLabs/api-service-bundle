@@ -35,8 +35,8 @@ final class ApiServiceFactory
     public function getService(
         ClientInterface $httpClient,
         Schema $schema,
-        LoggerInterface $logger = null,
-        PaginationInterface $pagination = null,
+        ?LoggerInterface $logger = null,
+        ?PaginationInterface $pagination = null,
         array $config = []
     ): ApiService {
         return new ApiService(

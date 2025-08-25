@@ -11,7 +11,7 @@ class PaginationLinks
     private ?string $next;
     private ?string $prev;
 
-    public function __construct(string $first, string $last, string $next = null, string $prev = null)
+    public function __construct(string $first, string $last, ?string $next = null, ?string $prev = null)
     {
         $this->first = $first;
         $this->last = $last;

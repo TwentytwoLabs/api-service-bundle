@@ -56,7 +56,6 @@ final class HalPaginationTest extends TestCase
         $paginator = $this->getPagination();
         $pagination = $paginator->getPagination($data, $response);
 
-        $this->assertInstanceOf(Pagination::class, $pagination);
         $this->assertSame($paginationData['page'], $pagination->getPage());
         $this->assertSame($paginationData['perPage'], $pagination->getPerPage());
         $this->assertSame($paginationData['totalPage'], $pagination->getTotalPages());

@@ -14,15 +14,19 @@ final class ErrorDenormalizer implements DenormalizerInterface
     /**
      * @param array<int|string, mixed> $context
      */
-    public function supportsDenormalization(mixed $data, string $type, string $format = null, array $context = []): bool
-    {
+    public function supportsDenormalization(
+        mixed $data,
+        string $type,
+        ?string $format = null,
+        array $context = []
+    ): bool {
         return ErrorInterface::class === $type;
     }
 
     /**
      * @param array<int|string, mixed> $context
      */
-    public function denormalize(mixed $data, string $type, string $format = null, array $context = []): mixed
+    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
         /** @var ResponseInterface $response */
         $response = $context['response'];

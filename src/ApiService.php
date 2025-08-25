@@ -44,8 +44,8 @@ class ApiService
         SerializerInterface $serializer,
         ClientInterface|HttpAsyncClient $client,
         Schema $schema,
-        LoggerInterface $logger = null,
-        PaginationInterface $pagination = null,
+        ?LoggerInterface $logger = null,
+        ?PaginationInterface $pagination = null,
         array $config = []
     ) {
         $this->requestFactory = $requestFactory;

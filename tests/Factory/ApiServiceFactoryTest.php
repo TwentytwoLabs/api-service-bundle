@@ -30,17 +30,13 @@ final class ApiServiceFactoryTest extends TestCase
 
     public function testShouldBuildAnApiService(): void
     {
-        $schemaFile = 'schema.json';
-
         $schema = $this->createMock(Schema::class);
-
-        $schemaFactory = $this->createMock(SchemaFactoryInterface::class);
-        $schemaFactory->expects($this->once())->method('createSchema')->with($schemaFile)->willReturn($schema);
 
         $httpClient = $this->createMock(ClientInterface::class);
 
         $factory = $this->getFactory();
-        $this->assertInstanceOf(ApiService::class, $factory->getService($httpClient, $schemaFactory, $schemaFile));
+        $apiService = $factory->getService($httpClient, $schema);
+        $this->assertSame($schema, $apiService->getSchema());
     }
 
     private function getFactory(): ApiServiceFactory

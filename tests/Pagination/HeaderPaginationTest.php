@@ -129,8 +129,6 @@ final class HeaderPaginationTest extends TestCase
         $paginator = $this->getPagination($configs);
         $pagination = $paginator->getPagination([], $response);
 
-        $this->assertInstanceOf(Pagination::class, $pagination);
-
         $this->assertTrue($pagination->hasLinks());
         $link = $pagination->getLinks();
         $this->assertInstanceOf(PaginationLinks::class, $link);
@@ -195,8 +193,6 @@ final class HeaderPaginationTest extends TestCase
 
         $paginator = $this->getPagination($configs);
         $pagination = $paginator->getPagination([], $response);
-
-        $this->assertInstanceOf(Pagination::class, $pagination);
 
         $this->assertTrue($pagination->hasLinks());
         $link = $pagination->getLinks();

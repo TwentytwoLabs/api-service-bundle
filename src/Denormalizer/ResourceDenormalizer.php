@@ -26,8 +26,12 @@ final class ResourceDenormalizer implements DenormalizerInterface
     /**
      * @param array<int|string, mixed> $context
      */
-    public function supportsDenormalization(mixed $data, string $type, string $format = null, array $context = []): bool
-    {
+    public function supportsDenormalization(
+        mixed $data,
+        string $type,
+        ?string $format = null,
+        array $context = []
+    ): bool {
         return ResourceInterface::class === $type;
     }
 
@@ -37,7 +41,7 @@ final class ResourceDenormalizer implements DenormalizerInterface
     public function denormalize(
         mixed $data,
         string $type,
-        string $format = null,
+        ?string $format = null,
         array $context = []
     ): ResourceInterface {
         /** @var ResponseInterface $response */

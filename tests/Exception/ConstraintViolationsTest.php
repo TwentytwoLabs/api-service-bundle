@@ -15,7 +15,7 @@ final class ConstraintViolationsTest extends TestCase
     {
         $exception = new ConstraintViolations([]);
 
-        $this->assertInstanceOf(ApiServiceError::class, $exception);
+        $this->assertSame([], $exception->getViolations());
     }
 
     public function testShouldProvideTheListOfViolations(): void

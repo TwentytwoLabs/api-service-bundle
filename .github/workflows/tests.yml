@@ -7,11 +7,8 @@ jobs:
       runs-on: ubuntu-latest
       strategy:
          matrix:
-            php: [ '8.1', '8.2', '8.3' ]
-            symfony-version: [ '5.4.*', '6.3.*', '6.4.*' ]
-            include:
-               - php: '8.2'
-                 symfony-version: '7.0.*'
+            php: [ '8.3', '8.4' ]
+            symfony-version: [ '6.4.*', '7.0.*', '7.1.*', '7.2.*', '7.3.*' ]
          fail-fast: false
 
       steps:
@@ -39,7 +36,7 @@ jobs:
 
          -  name: Setup Composer minimum stability if required
             run: composer config minimum-stability dev
-            if: ${{ contains(fromJSON('["6.4.*", "7.0.*"]'), matrix.symfony-version) }}
+            if: ${{ contains(fromJSON('["6.4.*", "7.0.*", "7.1.*", "7.2.*", "7.3.*"]'), matrix.symfony-version) }}
 
          -  name: Install symfony version from matrix
             env:
