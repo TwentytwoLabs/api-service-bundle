@@ -42,7 +42,7 @@
     "phpstan": "./vendor/bin/phpstan analyse"
   },
   "require": {
-    "php": ">=8.0",
+    "php": ">=8.2",
     "ext-json": "*",
     "nyholm/psr7": "^1.8",
     "php-http/httplug": "^2.4",
@@ -50,8 +50,8 @@
     "psr/http-client": "^1.0",
     "psr/http-factory": "^1.0",
     "psr/http-message": "^2.0",
-    "symfony/framework-bundle": "^5.0 || ^6.0 || ^7.0",
-    "symfony/serializer": "^5.0 || ^6.0 || ^7.0",
+    "symfony/framework-bundle": "^6.0 || ^7.0 || ^8.0",
+    "symfony/serializer": "^6.0 || ^7.0 || ^8.0",
     "twentytwo-labs/api-validator": "^2.1"
   },
   "require-dev": {

@@ -12,6 +12,7 @@ abstract class AbstractPaginationFactory implements PaginationFactoryInterface
      * @param array<int|string, mixed> $options
      *
      * @return array<int|string, mixed>
+     *
      * @throws \Exception
      */
     protected function validate(string $name, array $options): array

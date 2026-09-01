@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace TwentytwoLabs\ApiServiceBundle\Tests\Factory\Pagination;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use TwentytwoLabs\ApiServiceBundle\Factory\Pagination\HalPaginationFactory;
 use TwentytwoLabs\ApiServiceBundle\Pagination\HalPagination;
 
+#[AllowMockObjectsWithoutExpectations]
 final class HalPaginationFactoryTest extends TestCase
 {
     public function testShouldCreatePagination(): void

@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace TwentytwoLabs\ApiServiceBundle\Tests\Factory\Pagination;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use TwentytwoLabs\ApiServiceBundle\Factory\Pagination\HeaderPaginationFactory;
 use TwentytwoLabs\ApiServiceBundle\Pagination\HeaderPagination;
 use TwentytwoLabs\ApiServiceBundle\Pagination\PaginationInterface;
 
+#[AllowMockObjectsWithoutExpectations]
 final class HeaderPaginationFactoryTest extends TestCase
 {
     public function testShouldCreatePaginationWhenMissingConfigs(): void

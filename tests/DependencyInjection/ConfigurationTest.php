@@ -3,6 +3,7 @@
 namespace TwentytwoLabs\ApiServiceBundle\Tests\DependencyInjection;
 
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionConfigurationTestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
@@ -10,6 +11,7 @@ use Psr\Http\Message\UriFactoryInterface;
 use TwentytwoLabs\ApiServiceBundle\DependencyInjection\ApiServiceExtension;
 use TwentytwoLabs\ApiServiceBundle\DependencyInjection\Configuration;
 
+#[AllowMockObjectsWithoutExpectations]
 final class ConfigurationTest extends AbstractExtensionConfigurationTestCase
 {
     public function testEmptyConfiguration(): void
@@ -60,7 +62,6 @@ final class ConfigurationTest extends AbstractExtensionConfigurationTestCase
                         'returnResponse' => false,
                         'baseUri' => 'https://foo.com',
                     ],
-                    'version' => 3,
                 ],
                 'bar' => [
                     'schema' => '/path/to/bar.json',
@@ -80,7 +81,6 @@ final class ConfigurationTest extends AbstractExtensionConfigurationTestCase
                         'returnResponse' => false,
                         'baseUri' => 'https://bar.com',
                     ],
-                    'version' => 3,
                 ],
             ],
         ];

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TwentytwoLabs\ApiServiceBundle\Tests\Denormalizer;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -20,6 +21,7 @@ use TwentytwoLabs\ApiServiceBundle\Model\Pagination;
 use TwentytwoLabs\ApiServiceBundle\Model\ResourceInterface;
 use TwentytwoLabs\ApiServiceBundle\Pagination\PaginationInterface;
 
+#[AllowMockObjectsWithoutExpectations]
 final class ResourceDenormalizerTest extends TestCase
 {
     private DataTransformer|MockObject $dataTransformer;

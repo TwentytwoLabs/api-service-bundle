@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace TwentytwoLabs\ApiServiceBundle\Tests;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use TwentytwoLabs\ApiServiceBundle\ApiServiceBundle;
 use TwentytwoLabs\ApiServiceBundle\DependencyInjection\Compiler\DataTransformerPass;
 use TwentytwoLabs\ApiServiceBundle\DependencyInjection\Compiler\FormatPass;
 
+#[AllowMockObjectsWithoutExpectations]
 final class ApiServiceBundleTest extends TestCase
 {
     public function testShouldAddCompilerPass(): void

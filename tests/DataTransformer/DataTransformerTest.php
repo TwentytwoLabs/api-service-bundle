@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace TwentytwoLabs\ApiServiceBundle\Tests\DataTransformer;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use TwentytwoLabs\ApiServiceBundle\DataTransformer\DataTransformer;
 use TwentytwoLabs\ApiServiceBundle\DataTransformer\DataTransformerInterface;
 
+#[AllowMockObjectsWithoutExpectations]
 final class DataTransformerTest extends TestCase
 {
     private DataTransformerInterface|MockObject $fooDataTransformer;

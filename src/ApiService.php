@@ -11,17 +11,17 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
-use TwentytwoLabs\ApiValidator\Decoder\DecoderUtils;
-use TwentytwoLabs\ApiValidator\Definition\OperationDefinition;
-use TwentytwoLabs\ApiValidator\Definition\ResponseDefinition;
-use TwentytwoLabs\ApiValidator\Schema;
-use TwentytwoLabs\ApiValidator\Validator\MessageValidator;
 use TwentytwoLabs\ApiServiceBundle\Exception\RequestViolations;
 use TwentytwoLabs\ApiServiceBundle\Exception\ResponseViolations;
 use TwentytwoLabs\ApiServiceBundle\Factory\RequestFactory;
 use TwentytwoLabs\ApiServiceBundle\Model\ErrorInterface;
 use TwentytwoLabs\ApiServiceBundle\Model\ResourceInterface;
 use TwentytwoLabs\ApiServiceBundle\Pagination\PaginationInterface;
+use TwentytwoLabs\ApiValidator\Decoder\DecoderUtils;
+use TwentytwoLabs\ApiValidator\Definition\OperationDefinition;
+use TwentytwoLabs\ApiValidator\Definition\ResponseDefinition;
+use TwentytwoLabs\ApiValidator\Schema;
+use TwentytwoLabs\ApiValidator\Validator\MessageValidator;
 
 class ApiService
 {
@@ -46,7 +46,7 @@ class ApiService
         Schema $schema,
         ?LoggerInterface $logger = null,
         ?PaginationInterface $pagination = null,
-        array $config = []
+        array $config = [],
     ) {
         $this->requestFactory = $requestFactory;
         $this->messageValidator = $messageValidator;
@@ -103,7 +103,7 @@ class ApiService
         string $operationId = '',
         string $method = '',
         string $path = '',
-        array $params = []
+        array $params = [],
     ): Promise {
         if (!$this->client instanceof HttpAsyncClient) {
             throw new \RuntimeException(sprintf('"%s" does not support async request', get_class($this->client)));
@@ -149,10 +149,18 @@ class ApiService
         return $new;
     }
 
+    public function withValidateResponse(bool $validateResponse): self
+    {
+        $new = clone $this;
+        $new->config['validateResponse'] = $validateResponse;
+
+        return $new;
+    }
+
     private function getDataFromResponse(
         ResponseInterface $response,
         ResponseDefinition $definition,
-        RequestInterface $request
+        RequestInterface $request,
     ): mixed {
         if (true === $this->config['returnResponse']) {
             return $response;

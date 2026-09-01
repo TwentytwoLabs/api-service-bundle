@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace TwentytwoLabs\ApiServiceBundle\Tests\DependencyInjection\Compiler;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use TwentytwoLabs\ApiServiceBundle\DependencyInjection\Compiler\FormatPass;
 
+#[AllowMockObjectsWithoutExpectations]
 final class FormatPassTest extends TestCase
 {
     private ContainerBuilder|MockObject $containerBuilder;

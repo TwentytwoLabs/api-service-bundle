@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace TwentytwoLabs\ApiServiceBundle\Tests\Pagination;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
-use TwentytwoLabs\ApiServiceBundle\Model\Pagination;
 use TwentytwoLabs\ApiServiceBundle\Pagination\HalPagination;
 
+#[AllowMockObjectsWithoutExpectations]
 final class HalPaginationTest extends TestCase
 {
     #[DataProvider('getContentType')]

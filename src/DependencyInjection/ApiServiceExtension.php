@@ -8,7 +8,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use TwentytwoLabs\ApiServiceBundle\ApiService;
@@ -22,12 +22,15 @@ final class ApiServiceExtension extends Extension
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        $loader->load('data-transformer.xml');
-        $loader->load('pagination.xml');
-        $loader->load('serializer.xml');
-        $loader->load('services.xml');
-        $loader->load('validator.xml');
+        $loader = new Loader\PhpFileLoader(
+            $container,
+            new FileLocator(sprintf('%s/../Resources/config', __DIR__))
+        );
+        $loader->load('data-transformer.php');
+        $loader->load('pagination.php');
+        $loader->load('serializer.php');
+        $loader->load('services.php');
+        $loader->load('validator.php');
 
         $this->configureDefaultServices($container, $config['default_services']);
         $this->configureApiServices($container, $config['apis']);
@@ -46,7 +49,7 @@ final class ApiServiceExtension extends Extension
         $serviceFactoryRef = new Reference('api_service.factory');
         foreach ($apiServices as $name => $arguments) {
             $paginationDef = $this->configureApiServicePagination($container, $name, $arguments);
-            $schemaFactoryId = $this->configureApiServiceCache($container, $arguments['version'], $arguments['cache']);
+            $schemaFactoryId = $this->configureApiServiceCache($container, $arguments['cache']);
 
             $container
                 ->register(sprintf('api_service.schema.%s', $name), Schema::class)
@@ -75,7 +78,7 @@ final class ApiServiceExtension extends Extension
     private function configureApiServicePagination(
         ContainerBuilder $container,
         string $name,
-        array $apiService
+        array $apiService,
     ): ?Definition {
         $pagination = $apiService['pagination'] ?? [];
         $paginationDef = null;
@@ -92,12 +95,9 @@ final class ApiServiceExtension extends Extension
         return $paginationDef;
     }
 
-    private function configureApiServiceCache(ContainerBuilder $container, int $version, array $cache): string
+    private function configureApiServiceCache(ContainerBuilder $container, array $cache): string
     {
         $schemaFactoryId = 'api_service.schema_factory.open-api';
-        if (2 === $version) {
-            $schemaFactoryId = 'api_service.schema_factory.swagger';
-        }
 
         if ($cache['enabled']) {
             $schemaFactory = $container->getDefinition('api_service.schema_factory.cached_factory');

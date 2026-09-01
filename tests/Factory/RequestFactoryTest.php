@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TwentytwoLabs\ApiServiceBundle\Tests\Factory;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestFactoryInterface;
@@ -19,6 +20,7 @@ use TwentytwoLabs\ApiValidator\Definition\Parameter;
 use TwentytwoLabs\ApiValidator\Definition\Parameters;
 use TwentytwoLabs\ApiServiceBundle\Factory\RequestFactory;
 
+#[AllowMockObjectsWithoutExpectations]
 final class RequestFactoryTest extends TestCase
 {
     private RequestFactoryInterface|MockObject $requestFactory;

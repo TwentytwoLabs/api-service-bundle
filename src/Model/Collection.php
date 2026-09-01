@@ -13,7 +13,7 @@ final class Collection implements ResourceInterface, \IteratorAggregate
     private array $data;
     /** @var array<int|string, mixed> */
     private array $meta;
-    protected ?Pagination $pagination;
+    private ?Pagination $pagination;
 
     /**
      * @param array<int|string, mixed> $data

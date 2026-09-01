@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace TwentytwoLabs\ApiServiceBundle\Tests\Denormalizer;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use TwentytwoLabs\ApiServiceBundle\Denormalizer\ErrorDenormalizer;
-use TwentytwoLabs\ApiServiceBundle\Model\Error;
 use TwentytwoLabs\ApiServiceBundle\Model\ErrorInterface;
 use TwentytwoLabs\ApiServiceBundle\Model\ResourceInterface;
 
+#[AllowMockObjectsWithoutExpectations]
 final class ErrorDenormalizerTest extends TestCase
 {
     public function testShouldSupportsDenormalization(): void
@@ -34,7 +35,6 @@ final class ErrorDenormalizerTest extends TestCase
         $denormalizer = $this->getDenormalizer();
         $error = $denormalizer->denormalize([], ErrorDenormalizer::class, null, ['response' => $response]);
 
-        $this->assertInstanceOf(Error::class, $error);
         $this->assertSame('Internal Server Error', $error->getMessage());
         $this->assertSame([], $error->getViolations());
         $this->assertSame(500, $error->getCode());
@@ -62,7 +62,6 @@ final class ErrorDenormalizerTest extends TestCase
             ['response' => $response]
         );
 
-        $this->assertInstanceOf(Error::class, $error);
         $this->assertSame('Bad Request', $error->getMessage());
         $this->assertSame($violations, $error->getViolations());
         $this->assertSame(400, $error->getCode());

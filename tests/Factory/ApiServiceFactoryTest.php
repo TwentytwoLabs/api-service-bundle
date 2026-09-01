@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace TwentytwoLabs\ApiServiceBundle\Tests\Factory;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
 use Symfony\Component\Serializer\SerializerInterface;
-use TwentytwoLabs\ApiValidator\Factory\SchemaFactoryInterface;
 use TwentytwoLabs\ApiValidator\Schema;
 use TwentytwoLabs\ApiValidator\Validator\MessageValidator;
-use TwentytwoLabs\ApiServiceBundle\ApiService;
 use TwentytwoLabs\ApiServiceBundle\Factory\ApiServiceFactory;
 use TwentytwoLabs\ApiServiceBundle\Factory\RequestFactory;
 
+#[AllowMockObjectsWithoutExpectations]
 final class ApiServiceFactoryTest extends TestCase
 {
     private RequestFactory|MockObject $requestFactory;

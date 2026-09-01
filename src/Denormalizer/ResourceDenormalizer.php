@@ -7,12 +7,12 @@ namespace TwentytwoLabs\ApiServiceBundle\Denormalizer;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use TwentytwoLabs\ApiValidator\Definition\ResponseDefinition;
 use TwentytwoLabs\ApiServiceBundle\DataTransformer\DataTransformer;
 use TwentytwoLabs\ApiServiceBundle\Model\Collection;
 use TwentytwoLabs\ApiServiceBundle\Model\Item;
 use TwentytwoLabs\ApiServiceBundle\Model\ResourceInterface;
 use TwentytwoLabs\ApiServiceBundle\Pagination\PaginationInterface;
+use TwentytwoLabs\ApiValidator\Definition\ResponseDefinition;
 
 final class ResourceDenormalizer implements DenormalizerInterface
 {
@@ -30,7 +30,7 @@ final class ResourceDenormalizer implements DenormalizerInterface
         mixed $data,
         string $type,
         ?string $format = null,
-        array $context = []
+        array $context = [],
     ): bool {
         return ResourceInterface::class === $type;
     }
@@ -42,7 +42,7 @@ final class ResourceDenormalizer implements DenormalizerInterface
         mixed $data,
         string $type,
         ?string $format = null,
-        array $context = []
+        array $context = [],
     ): ResourceInterface {
         /** @var ResponseInterface $response */
         $response = $context['response'];
@@ -57,12 +57,14 @@ final class ResourceDenormalizer implements DenormalizerInterface
         $pagination = $context['pagination'];
 
         if (!$definition->hasBodySchema()) {
-            throw new \LogicException(sprintf(
+            $message = sprintf(
                 'Cannot transform the response into a resource. You need to provide a schema for response %d in %s %s',
                 $response->getStatusCode(),
                 $request->getMethod(),
                 $request->getUri()->getPath()
-            ));
+            );
+
+            throw new \LogicException($message);
         }
 
         $bodySchema = $this->getBodySchema($definition->getBodySchema(), $response->getHeaderLine('Content-Type'));
@@ -117,7 +119,7 @@ final class ResourceDenormalizer implements DenormalizerInterface
     }
 
     /**
-     * @return array<string, boolean>
+     * @return array<string, bool>
      */
     public function getSupportedTypes(?string $format): array
     {

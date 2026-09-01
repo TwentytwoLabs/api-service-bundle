@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace TwentytwoLabs\ApiServiceBundle\Tests\Pagination;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
-use TwentytwoLabs\ApiServiceBundle\Model\Pagination;
 use TwentytwoLabs\ApiServiceBundle\Model\PaginationLinks;
 use TwentytwoLabs\ApiServiceBundle\Pagination\HeaderPagination;
 use TwentytwoLabs\ApiServiceBundle\Pagination\PaginationInterface;
 
+#[AllowMockObjectsWithoutExpectations]
 final class HeaderPaginationTest extends TestCase
 {
     public function testShouldSupportPagination(): void
@@ -22,21 +23,31 @@ final class HeaderPaginationTest extends TestCase
             ->expects($matcher)
             ->method('getHeaderLine')
             ->willReturnCallback(function (string $name) use ($matcher) {
-                match ($matcher->numberOfInvocations()) {
-                    1 => $this->assertEquals('x-page', $name),
-                    2 => $this->assertEquals('x-per-page', $name),
-                    3 => $this->assertEquals('x-total-items', $name),
-                    4 => $this->assertEquals('x-total-pages', $name),
-                    default => throw new \Exception(sprintf('Method "getHeaderLine" should call %d times', 4)),
-                };
+                if (1 === $matcher->numberOfInvocations()) {
+                    $this->assertEquals('x-page', $name);
 
-                return match ($matcher->numberOfInvocations()) {
-                    1 => '1',
-                    2 => '30',
-                    3 => '300',
-                    4 => '10',
-                    default => throw new \Exception(sprintf('Method "getHeaderLine" should call %d times', 4)),
-                };
+                    return '1';
+                }
+
+                if (2 === $matcher->numberOfInvocations()) {
+                    $this->assertEquals('x-per-page', $name);
+
+                    return '30';
+                }
+
+                if (3 === $matcher->numberOfInvocations()) {
+                    $this->assertEquals('x-total-items', $name);
+
+                    return '300';
+                }
+
+                if (4 === $matcher->numberOfInvocations()) {
+                    $this->assertEquals('x-total-pages', $name);
+
+                    return '10';
+                }
+
+                throw new \Exception(sprintf('Method "getHeaderLine" should call %d times', 4));
             })
         ;
 
@@ -60,17 +71,19 @@ final class HeaderPaginationTest extends TestCase
             ->expects($matcher)
             ->method('getHeaderLine')
             ->willReturnCallback(function (string $name) use ($matcher) {
-                match ($matcher->numberOfInvocations()) {
-                    1 => $this->assertEquals('x-page', $name),
-                    2 => $this->assertEquals('x-per-page', $name),
-                    default => throw new \Exception(sprintf('Method "getHeaderLine" should call %d times', 2)),
-                };
+                if (1 === $matcher->numberOfInvocations()) {
+                    $this->assertEquals('x-page', $name);
 
-                return match ($matcher->numberOfInvocations()) {
-                    1 => '1',
-                    2 => '',
-                    default => throw new \Exception(sprintf('Method "getHeaderLine" should call %d times', 2)),
-                };
+                    return '1';
+                }
+
+                if (2 === $matcher->numberOfInvocations()) {
+                    $this->assertEquals('x-per-page', $name);
+
+                    return '';
+                }
+
+                throw new \Exception(sprintf('Method "getHeaderLine" should call %d times', 2));
             })
         ;
 
@@ -101,21 +114,31 @@ final class HeaderPaginationTest extends TestCase
             ->expects($matcher)
             ->method('getHeaderLine')
             ->willReturnCallback(function (string $name) use ($matcher) {
-                match ($matcher->numberOfInvocations()) {
-                    1 => $this->assertEquals('x-page', $name),
-                    2 => $this->assertEquals('x-per-page', $name),
-                    3 => $this->assertEquals('x-total-items', $name),
-                    4 => $this->assertEquals('x-total-pages', $name),
-                    default => throw new \Exception(sprintf('Method "getHeaderLine" should call %d times', 4)),
-                };
+                if (1 === $matcher->numberOfInvocations()) {
+                    $this->assertEquals('x-page', $name);
 
-                return match ($matcher->numberOfInvocations()) {
-                    1 => '3',
-                    2 => '30',
-                    3 => '300',
-                    4 => '10',
-                    default => throw new \Exception(sprintf('Method "getHeaderLine" should call %d times', 4)),
-                };
+                    return '3';
+                }
+
+                if (2 === $matcher->numberOfInvocations()) {
+                    $this->assertEquals('x-per-page', $name);
+
+                    return '30';
+                }
+
+                if (3 === $matcher->numberOfInvocations()) {
+                    $this->assertEquals('x-total-items', $name);
+
+                    return '300';
+                }
+
+                if (4 === $matcher->numberOfInvocations()) {
+                    $this->assertEquals('x-total-pages', $name);
+
+                    return '10';
+                }
+
+                throw new \Exception(sprintf('Method "getHeaderLine" should call %d times', 4));
             })
         ;
 
@@ -166,21 +189,31 @@ final class HeaderPaginationTest extends TestCase
             ->expects($matcher)
             ->method('getHeaderLine')
             ->willReturnCallback(function (string $name) use ($matcher) {
-                match ($matcher->numberOfInvocations()) {
-                    1 => $this->assertEquals('X-Page', $name),
-                    2 => $this->assertEquals('X-Per-Page', $name),
-                    3 => $this->assertEquals('X-Total-Items', $name),
-                    4 => $this->assertEquals('X-Total-Pages', $name),
-                    default => throw new \Exception(sprintf('Method "getHeaderLine" should call %d times', 4)),
-                };
+                if (1 === $matcher->numberOfInvocations()) {
+                    $this->assertEquals('X-Page', $name);
 
-                return match ($matcher->numberOfInvocations()) {
-                    1 => '3',
-                    2 => '30',
-                    3 => '300',
-                    4 => '10',
-                    default => throw new \Exception(sprintf('Method "getHeaderLine" should call %d times', 4)),
-                };
+                    return '3';
+                }
+
+                if (2 === $matcher->numberOfInvocations()) {
+                    $this->assertEquals('X-Per-Page', $name);
+
+                    return '30';
+                }
+
+                if (3 === $matcher->numberOfInvocations()) {
+                    $this->assertEquals('X-Total-Items', $name);
+
+                    return '300';
+                }
+
+                if (4 === $matcher->numberOfInvocations()) {
+                    $this->assertEquals('X-Total-Pages', $name);
+
+                    return '10';
+                }
+
+                throw new \Exception(sprintf('Method "getHeaderLine" should call %d times', 4));
             })
         ;
 

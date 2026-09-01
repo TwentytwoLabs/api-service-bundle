@@ -6,6 +6,7 @@ namespace TwentytwoLabs\ApiServiceBundle\Tests;
 
 use Http\Client\HttpAsyncClient;
 use Http\Promise\FulfilledPromise;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
@@ -27,6 +28,7 @@ use TwentytwoLabs\ApiServiceBundle\Model\ErrorInterface;
 use TwentytwoLabs\ApiServiceBundle\Model\ResourceInterface;
 use TwentytwoLabs\ApiServiceBundle\Pagination\PaginationInterface;
 
+#[AllowMockObjectsWithoutExpectations]
 final class ApiServiceTest extends TestCase
 {
     private RequestFactory|MockObject $requestFactory;
@@ -370,6 +372,85 @@ final class ApiServiceTest extends TestCase
         $this->assertNotSame($newApiService, $apiService);
         $this->assertSame($this->schema, $newApiService->getSchema());
         $this->assertSame($response, $newApiService->call(operationId: 'getFooCollection', params: ['foo' => 'bar']));
+    }
+
+    public function testShouldSendRequestDirectlyWithRequestAndNotResponseValidation(): void
+    {
+        $responseDefinition = $this->createMock(ResponseDefinition::class);
+        $responseDefinition->expects($this->once())->method('hasBodySchema')->willReturn(true);
+
+        $operationDefinition = $this->createMock(OperationDefinition::class);
+        $operationDefinition->expects($this->once())->method('getResponseDefinition')->with(200)->willReturn($responseDefinition);
+
+        $this->schema->expects($this->once())->method('getOperationDefinition')->with()->willReturn($operationDefinition);
+
+        $request = $this->createMock(RequestInterface::class);
+
+        $stream = $this->createMock(StreamInterface::class);
+        $stream->expects($this->once())->method('__toString')->willReturn('{"foo":"bar"}');
+
+        $response = $this->createMock(ResponseInterface::class);
+        $response->expects($this->exactly(2))->method('getStatusCode')->willReturn(200);
+        $response->expects($this->exactly(2))->method('getHeaderLine')->with('Content-Type')->willReturn('application/json');
+        $response->expects($this->once())->method('getBody')->willReturn($stream);
+
+        $this->requestFactory
+            ->expects($this->once())
+            ->method('createRequestFromDefinition')
+            ->with($operationDefinition, 'http://example.org', ['foo' => 'bar'])
+            ->willReturn($request)
+        ;
+
+        $this->messageValidator
+            ->expects($this->once())
+            ->method('validateRequest')
+            ->with($request, $operationDefinition)
+        ;
+        $this->messageValidator->expects($this->once())->method('hasViolations')->willReturn(false);
+        $this->messageValidator->expects($this->never())->method('getViolations');
+        $matcher = $this->exactly(2);
+        $this->logger
+            ->expects($matcher)
+            ->method('info')
+            ->willReturnCallback(function (string $message, array $context) use ($matcher, $request, $response) {
+                if (1 === $matcher->numberOfInvocations()) {
+                    $this->assertSame('Sending request:', $message);
+                    $this->assertSame(['request' => $request], $context);
+                }
+
+                if (2 === $matcher->numberOfInvocations()) {
+                    $this->assertSame('Received response:', $message);
+                    $this->assertSame(['response' => $response], $context);
+                }
+            })
+        ;
+        $this->client->expects($this->once())->method('sendRequest')->with($request)->willReturn($response);
+        $this->messageValidator->expects($this->never())->method('validateResponse');
+
+        $item = $this->createMock(ResourceInterface::class);
+
+        $this->serializer
+            ->expects($this->once())
+            ->method('deserialize')
+            ->with(
+                '{"foo":"bar"}',
+                ResourceInterface::class,
+                'json',
+                [
+                    'response' => $response,
+                    'responseDefinition' => $responseDefinition,
+                    'request' => $request,
+                    'pagination' => $this->pagination,
+                ]
+            )
+            ->willReturn($item)
+        ;
+
+        $apiService = $this->getApiService();
+        $newApiService = $apiService->withValidateResponse(false);
+        $this->assertNotSame($newApiService, $apiService);
+        $this->assertSame($this->schema, $apiService->getSchema());
+        $this->assertSame($item, $newApiService->call(operationId: 'getFooCollection', params: ['foo' => 'bar']));
     }
 
     public function testShouldSendRequestDirectlyWithRequestAndResponseValidationAndWithOutLogger(): void

@@ -1,34 +1,43 @@
 name: Tests
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
    tests:
-      name: PHP ${{ matrix.php }} Latest
+      name: PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony-version }}
       runs-on: ubuntu-latest
       strategy:
          matrix:
-            php: [ '8.3', '8.4' ]
-            symfony-version: [ '6.4.*', '7.0.*', '7.1.*', '7.2.*', '7.3.*' ]
+            php: [ '8.3', '8.4', '8.5' ]
+            symfony-version: [ '6.4.*', '7.4.*', '8.1.*' ]
+            exclude:
+               -  php: '8.2'
+                  symfony-version: '8.1.*'
+               -  php: '8.3'
+                  symfony-version: '8.1.*'
          fail-fast: false
 
       steps:
-         -  name: "Add dependencies"
-            run: "composer require --no-progress --no-scripts --no-plugins symfony/flex"
-
          -  name: Checkout code
-            uses: actions/checkout@v2
+            uses: actions/checkout@v4
 
          -  name: Setup PHP
             uses: shivammathur/setup-php@v2
             with:
                php-version: ${{ matrix.php }}
                coverage: xdebug
+
+         -  name: "Add dependencies"
+            run: "composer require --no-progress --no-scripts --no-plugins symfony/flex"
+
+         -  name: "Allow Symfony Flex plugin"
+            run: "composer config --no-plugins allow-plugins.symfony/flex true"
+
          -  name: Get Composer Cache Directory
             id: composer-cache
-            run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+            run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
 
          -  name: Cache dependencies
-            uses: actions/cache@v3
+            uses: actions/cache@v4
             with:
                path: ${{ steps.composer-cache.outputs.dir }}
                key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
@@ -36,7 +45,7 @@ jobs:
 
          -  name: Setup Composer minimum stability if required
             run: composer config minimum-stability dev
-            if: ${{ contains(fromJSON('["6.4.*", "7.0.*", "7.1.*", "7.2.*", "7.3.*"]'), matrix.symfony-version) }}
+            if: ${{ contains(fromJSON('["8.1.*"]'), matrix.symfony-version) }}
 
          -  name: Install symfony version from matrix
             env:

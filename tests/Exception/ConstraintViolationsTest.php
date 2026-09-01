@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace TwentytwoLabs\ApiServiceBundle\Tests\Exception;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use TwentytwoLabs\ApiValidator\Validator\ConstraintViolation;
 use TwentytwoLabs\ApiServiceBundle\Exception\ApiServiceError;
 use TwentytwoLabs\ApiServiceBundle\Exception\ConstraintViolations;
 
+#[AllowMockObjectsWithoutExpectations]
 final class ConstraintViolationsTest extends TestCase
 {
     public function testShouldExtendApiServiceError(): void

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace TwentytwoLabs\ApiServiceBundle\Tests\DataTransformer;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use TwentytwoLabs\ApiServiceBundle\DataTransformer\HalDataTransformer;
 
+#[AllowMockObjectsWithoutExpectations]
 final class HalDataTransformerTest extends TestCase
 {
     #[DataProvider('getValidContentType')]

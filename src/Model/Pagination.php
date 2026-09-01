@@ -17,7 +17,7 @@ class Pagination
         int $perPage,
         int $totalItems,
         int $totalPages,
-        ?PaginationLinks $links = null
+        ?PaginationLinks $links = null,
     ) {
         $this->page = $page;
         $this->perPage = $perPage;

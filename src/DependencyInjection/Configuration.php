@@ -48,7 +48,6 @@ final class Configuration implements ConfigurationInterface
                             ->info('Use a specific Logger for an API Service')
                             ->defaultValue('logger')
                         ->end()
-                        ->scalarNode('version')->info('Use a specific version')->defaultValue(3)->end()
                         ->arrayNode('pagination')
                             ->info('Pagination provider')
                             ->children()

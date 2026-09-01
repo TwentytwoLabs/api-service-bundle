@@ -7,11 +7,10 @@ namespace TwentytwoLabs\ApiServiceBundle\Factory;
 use Psr\Http\Client\ClientInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
-use TwentytwoLabs\ApiValidator\Factory\SchemaFactoryInterface;
-use TwentytwoLabs\ApiValidator\Schema;
-use TwentytwoLabs\ApiValidator\Validator\MessageValidator;
 use TwentytwoLabs\ApiServiceBundle\ApiService;
 use TwentytwoLabs\ApiServiceBundle\Pagination\PaginationInterface;
+use TwentytwoLabs\ApiValidator\Schema;
+use TwentytwoLabs\ApiValidator\Validator\MessageValidator;
 
 final class ApiServiceFactory
 {
@@ -22,7 +21,7 @@ final class ApiServiceFactory
     public function __construct(
         RequestFactory $requestFactory,
         MessageValidator $messageValidator,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
     ) {
         $this->requestFactory = $requestFactory;
         $this->messageValidator = $messageValidator;
@@ -37,7 +36,7 @@ final class ApiServiceFactory
         Schema $schema,
         ?LoggerInterface $logger = null,
         ?PaginationInterface $pagination = null,
-        array $config = []
+        array $config = [],
     ): ApiService {
         return new ApiService(
             $this->requestFactory,

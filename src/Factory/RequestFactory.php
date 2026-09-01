@@ -27,7 +27,7 @@ class RequestFactory
         UriTemplate $uriTemplate,
         UriFactoryInterface $uriFactory,
         StreamFactoryInterface $streamFactory,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
     ) {
         $this->requestFactory = $requestFactory;
         $this->uriTemplate = $uriTemplate;
@@ -42,7 +42,7 @@ class RequestFactory
     public function createRequestFromDefinition(
         OperationDefinition $definition,
         string $baseUri,
-        array $params
+        array $params,
     ): RequestInterface {
         $requestParameters = $definition->getRequestParameters();
         $parameters = [];
@@ -122,7 +122,7 @@ class RequestFactory
         string $baseUri,
         string $method,
         string $pathTemplate,
-        array $parameters
+        array $parameters,
     ): RequestInterface {
         $path = $this->uriTemplate->expand($pathTemplate, $parameters['path'] ?? []);
         $query = http_build_query($parameters['query'] ?? []);
